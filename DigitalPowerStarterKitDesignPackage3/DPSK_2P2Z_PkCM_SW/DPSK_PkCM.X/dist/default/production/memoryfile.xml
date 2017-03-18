@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <executable name="dist/default/production/DPSK_PkCM.X.production.elf">
+    <memory name="data">
+      <units>bytes</units>
+      <length>8192</length>
+      <used>192</used>
+      <free>8000</free>
+    </memory>
+    <memory name="program">
+      <units>bytes</units>
+      <length>66624</length>
+      <used>6768</used>
+      <free>59856</free>
+    </memory>
+  </executable>
+</project>

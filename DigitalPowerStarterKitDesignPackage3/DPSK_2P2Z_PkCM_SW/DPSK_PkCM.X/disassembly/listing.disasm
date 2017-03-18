@@ -1,0 +1,3700 @@
+Disassembly Listing for Digital Power Starter Kit
+Generated From:
+C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/Digital Power Starter Kit.X/dist/default/debug/Digital_Power_Starter_Kit.X.debug.elf
+Sep 30, 2014 12:20:35 PM
+
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/traps.c
+1:                 /******************************************************************************/
+2:                 /* Files to Include                                                           */
+3:                 /******************************************************************************/
+4:                 
+5:                 /* Device header file */
+6:                 #if defined(__dsPIC33E__)
+7:                 	#include <p33Exxxx.h>
+8:                 #elif defined(__dsPIC33F__)
+9:                 	#include <p33Fxxxx.h>
+10:                #endif
+11:                
+12:                #include <stdint.h>        /* Includes uint16_t definition */
+13:                #include <stdbool.h>       /* Includes true/false definition */
+14:                
+15:                /******************************************************************************/
+16:                /* Trap Function Prototypes                                                   */
+17:                /******************************************************************************/
+18:                
+19:                /* <Other function prototypes for debugging trap code may be inserted here>   */
+20:                
+21:                /* Use if INTCON2 ALTIVT=1 */
+22:                void __attribute__((interrupt,no_auto_psv)) _OscillatorFail(void);
+23:                void __attribute__((interrupt,no_auto_psv)) _AddressError(void);
+24:                void __attribute__((interrupt,no_auto_psv)) _StackError(void);
+25:                void __attribute__((interrupt,no_auto_psv)) _MathError(void);
+26:                
+27:                #if defined(__dsPIC33F__)
+28:                
+29:                /* Use if INTCON2 ALTIVT=0 */
+30:                void __attribute__((interrupt,no_auto_psv)) _AltOscillatorFail(void);
+31:                void __attribute__((interrupt,no_auto_psv)) _AltAddressError(void);
+32:                void __attribute__((interrupt,no_auto_psv)) _AltStackError(void);
+33:                void __attribute__((interrupt,no_auto_psv)) _AltMathError(void);
+34:                
+35:                #endif
+36:                
+37:                /* Default interrupt handler */
+38:                void __attribute__((interrupt,no_auto_psv)) _DefaultInterrupt(void);
+39:                
+40:                #if defined(__dsPIC33E__)
+41:                
+42:                /* These are additional traps in the 33E family.  Refer to the PIC33E
+43:                migration guide.  There are no Alternate Vectors in the 33E family. */
+44:                void __attribute__((interrupt,no_auto_psv)) _HardTrapError(void);
+45:                void __attribute__((interrupt,no_auto_psv)) _SoftTrapError(void);
+46:                
+47:                #endif
+48:                
+49:                /******************************************************************************/
+50:                /* Trap Handling                                                              */
+51:                /*                                                                            */
+52:                /* These trap routines simply ensure that the device continuously loops       */
+53:                /* within each routine.  Users who actually experience one of these traps     */
+54:                /* can add code to handle the error.  Some basic examples for trap code,      */
+55:                /* including assembly routines that process trap sources, are available at    */
+56:                /* www.microchip.com/codeexamples                                             */
+57:                /******************************************************************************/
+58:                
+59:                /* Primary (non-alternate) address error trap function declarations */
+60:                void __attribute__((interrupt,no_auto_psv)) _OscillatorFail(void)
+61:                {
+000502  781F80     MOV W0, [W15++]
+000504  FA0000     LNK #0x0
+62:                        INTCON1bits.OSCFAIL = 0;        /* Clear the trap flag */
+000506  A928C0     BCLR INTCON1, #1
+63:                        while(1);
+000508  37FFFF     BRA 0x508
+64:                }
+65:                
+66:                void __attribute__((interrupt,no_auto_psv)) _AddressError(void)
+67:                {
+00050A  781F80     MOV W0, [W15++]
+00050C  FA0000     LNK #0x0
+68:                        INTCON1bits.ADDRERR = 0;        /* Clear the trap flag */
+00050E  A968C0     BCLR INTCON1, #3
+69:                        while (1);
+000510  37FFFF     BRA 0x510
+70:                }
+71:                void __attribute__((interrupt,no_auto_psv)) _StackError(void)
+72:                {
+000512  781F80     MOV W0, [W15++]
+000514  FA0000     LNK #0x0
+73:                        INTCON1bits.STKERR = 0;         /* Clear the trap flag */
+000516  A948C0     BCLR INTCON1, #2
+74:                        while (1);
+000518  37FFFF     BRA 0x518
+75:                }
+76:                
+77:                void __attribute__((interrupt,no_auto_psv)) _MathError(void)
+78:                {
+00051A  781F80     MOV W0, [W15++]
+00051C  FA0000     LNK #0x0
+79:                        INTCON1bits.MATHERR = 0;        /* Clear the trap flag */
+00051E  A988C0     BCLR INTCON1, #4
+80:                        while (1);
+000520  37FFFF     BRA 0x520
+81:                }
+82:                
+83:                #if defined(__dsPIC33F__)
+84:                
+85:                /* Alternate address error trap function declarations */
+86:                void __attribute__((interrupt,no_auto_psv)) _AltOscillatorFail(void)
+87:                {
+88:                        INTCON1bits.OSCFAIL = 0;        /* Clear the trap flag */
+89:                        while (1);
+90:                }
+91:                
+92:                void __attribute__((interrupt,no_auto_psv)) _AltAddressError(void)
+93:                {
+94:                        INTCON1bits.ADDRERR = 0;        /* Clear the trap flag */
+95:                        while (1);
+96:                }
+97:                
+98:                void __attribute__((interrupt,no_auto_psv)) _AltStackError(void)
+99:                {
+100:                       INTCON1bits.STKERR = 0;         /* Clear the trap flag */
+101:                       while (1);
+102:               }
+103:               
+104:               void __attribute__((interrupt,no_auto_psv)) _AltMathError(void)
+105:               {
+106:                       INTCON1bits.MATHERR = 0;        /* Clear the trap flag */
+107:                       while (1);
+108:               }
+109:               
+110:               #endif
+111:               
+112:               /******************************************************************************/
+113:               /* Default Interrupt Handler                                                  */
+114:               /*                                                                            */
+115:               /* This executes when an interrupt occurs for an interrupt source with an     */
+116:               /* improperly defined or undefined interrupt handling routine.                */
+117:               /******************************************************************************/
+118:               void __attribute__((interrupt,no_auto_psv)) _DefaultInterrupt(void)
+119:               {
+000522  FA0000     LNK #0x0
+120:                       while(1);
+000524  37FFFF     BRA 0x524
+121:               }
+122:               
+123:               #if defined(__dsPIC33E__)
+124:               
+125:               /* These traps are new to the dsPIC33E family.  Refer to the device Interrupt
+126:               chapter of the FRM to understand trap priority. */
+127:               void __attribute__((interrupt,no_auto_psv)) _HardTrapError(void)
+128:               {
+000526  FA0000     LNK #0x0
+129:                   while(1);
+000528  37FFFF     BRA 0x528
+130:               }
+131:               void __attribute__((interrupt,no_auto_psv)) _SoftTrapError(void)
+132:               {
+00052A  FA0000     LNK #0x0
+133:                   while(1);
+00052C  37FFFF     BRA 0x52C
+134:               }
+135:               
+136:               #endif
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/smps_3p3z_dspic.s
+                                                  1:     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  2:     ; © 2014 Microchip Technology Inc.
+                                                  3:     ;
+                                                  4:     ; MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any
+                                                  5:     ; derivatives created by any person or entity by or on your behalf, exclusively
+                                                  6:     ; with Microchip?s products.  Microchip and its licensors retain all ownership
+                                                  7:     ; and intellectual property rights in the accompanying software and in all
+                                                  8:     ; derivatives here to.
+                                                  9:     ;
+                                                  10:    ; This software and any accompanying information is for suggestion only.  It
+                                                  11:    ; does not modify Microchip?s standard warranty for its products.  You agree
+                                                  12:    ; that you are solely responsible for testing the software and determining its
+                                                  13:    ; suitability.  Microchip has no obligation to modify, test, certify, or
+                                                  14:    ; support the software.
+                                                  15:    ;
+                                                  16:    ; THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER
+                                                  17:    ; EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+                                                  18:    ; WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR
+                                                  19:    ; PURPOSE APPLY TO THIS SOFTWARE, ITS INTERACTION WITH MICROCHIP?S PRODUCTS,
+                                                  20:    ; COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION.
+                                                  21:    ;
+                                                  22:    ; IN NO EVENT, WILL MICROCHIP BE LIABLE, WHETHER IN CONTRACT, WARRANTY, TORT
+                                                  23:    ; (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), STRICT LIABILITY,
+                                                  24:    ; INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+                                                  25:    ; EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF
+                                                  26:    ; ANY KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWSOEVER CAUSED, EVEN IF
+                                                  27:    ; MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.
+                                                  28:    ; TO THE FULLEST EXTENT ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL
+                                                  29:    ; CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF
+                                                  30:    ; FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+                                                  31:    ;
+                                                  32:    ; MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
+                                                  33:    ; TERMS.
+                                                  34:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  35:    
+                                                  36:    
+                                                  37:    ; Local inclusions.
+                                                  38:    	.nolist
+                                                  39:    	.list
+                                                  40:    
+                                                  41:    ; Define data structure address offsets
+                                                  42:        .equ    offsetACoefficients, 	0
+                                                  43:    	.equ    offsetBCoefficients, 	2
+                                                  44:    	.equ    offsetControlHistory,	4
+                                                  45:    	.equ	offsetErrorHistory, 	6
+                                                  46:    	.equ	offsetPreShift,			8
+                                                  47:    	.equ	offsetPostShift,        10
+                                                  48:    	.equ	offsetPostScaler, 		12
+                                                  49:    	.equ	offsetMinOutput,        14
+                                                  50:    	.equ	offsetMaxOutput,        16
+                                                  51:    
+                                                  52:    
+                                                  53:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  54:    
+                                                  55:    ;        .section .libdsp, code		; use this section type when used as hidden library file
+                                                  56:            .section .text				; use this section type for debugging
+                                                  57:    
+                                                  58:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  59:    ;
+                                                  60:    ; _SMPS_Controller3P3ZUpdate:
+                                                  61:    ; Prototype:
+                                                  62:    ;   void SMPS_Controller3P3ZUpdate(SMPS_3P3Z_T* controllerData,
+                                                  63:    ;                                  volatile uint16_t* controllerInputRegister,
+                                                  64:    ;	                               int16_t reference,
+                                                  65:    ;                                  volatile uint16_t* controllerOutputRegister);
+                                                  66:    ;
+                                                  67:    ; Operation:
+                                                  68:    ;                                          Wcp0   ( S + Wcz1 )( S + Wcz2 )
+                                                  69:    ;  Calculate the transfer function Hc(s) = ---- X ------------------------
+                                                  70:    ;                                           S     ( S + Wcp1 )( S + Wcp2 )
+                                                  71:    ;    Error Normalization
+                                                  72:    ;      ------------
+                                                  73:    ;     |   prsft    |
+                                                  74:    ;      ------------
+                                                  75:    ;Reference   |       e(n)          e(n-1)        e(n-2)        e(n-3)
+                                                  76:    ;Input       |             --------      --------      --------
+                                                  77:    ;        -   -   -        |        |    |        |    |        |
+                                                  78:    ;  o----|-|-|x|-|x|----o->| z^(-1) |-o->| z^(-1) |-o->| z^(-1) |--o       Post
+                                                  79:    ;        -   -   -     |  |        | |  |        | |  |        |  |      Scaling
+                                                  80:    ;        |      NORM   |   --------  |   --------  |   --------   |
+                                                  81:    ;        |             |             |             |              |       --------
+                                                  82:    ;Measured|            ---           ---           ---            ---     |        |   - - - - - - - - - -
+                                                  83:    ;Input   |       B0=>| X |     B1=>| X |     B2=>| X |      B3=>| X |    |posft   |  |                   |
+                                                  84:    ;        |            ---           ---           ---            ---     |postScalar |     P O W E R     |
+                                                  85:    ;        |             |             |             |              |       --------   |     P L A N T     |
+                                                  86:    ;        |            ----------------------------------------------        |        |                   |
+                                                  87:    ;        |           |                                              | U[n] ---       | PDCx              |
+                                                  88:    ;        |           |            A C C U M U L A T O R             |--o--| X |------O Duty Ratio => PWM |
+                                                  89:    ;        |           |                                              |  |   ---       |                   |
+                                                  90:    ;        |            ----------------------------------------------   |             |   Voltage/Current |
+                                                  91:    ;        |             |              |             |                  |             |      Feedback     |
+                                                  92:    ;        |            ---            ---           ---                 |             |         O         |
+                                                  93:    ;        |       A3=>| X |      A2=>| X |     A1=>| X |                |             |         |         |
+                                                  94:    ;        |            ---            ---           ---                 |              - - - - - - - - - -
+                                                  95:    ;        |             |              |             |                  |                       |
+                                                  96:    ;        |             |   --------   |  --------   |  --------        |                       | A/D
+                                                  97:    ;        |             |  |        |  | |        |  | |        |       |                       | Input
+                                                  98:    ;        |             o--| z^(-1) |<-o-| z^(-1) |<-o-| z^(-1) |-------                        |
+                                                  99:    ;        |                |        |    |        |    |        |                               |
+                                                  100:   ;        |                 --------      --------      --------                                |
+                                                  101:   ;        |                  u[n-3]        u[n-2]        u[n-1]                                 |
+                                                  102:   ;        |                                                                                     |
+                                                  103:   ;        |                                                                                     |
+                                                  104:   ;        '-------------------------------------------------------------------------------------'
+                                                  105:   ;
+                                                  106:   ;
+                                                  107:   ;   controlHistory[n] =
+                                                  108:   ;					(	errorHistory[n]     * bCoefficients[0]
+                                                  109:   ;                     + errorHistory[n-1]   * bCoefficients[1]
+                                                  110:   ;                     + errorHistory[n-2]   * bCoefficients[2]
+                                                  111:   ;                     + errorHistory[n-3]   * bCoefficients[3]
+                                                  112:   ;                     + controlHistory[n-1] * aCoefficients[0]
+                                                  113:   ;                     + controlHistory[n-2] * aCoefficients[1]
+                                                  114:   ;                     + controlHistory[n-3] * aCoefficients[2]
+                                                  115:   ;					)
+                                                  116:   ;					  
+                                                  117:   ;
+                                                  118:   ;  where:
+                                                  119:   ;
+                                                  120:   ;   aCoefficients[0]  = A1
+                                                  121:   ;   aCoefficients[1]  = A2
+                                                  122:   ;   aCoefficients[2]  = A3
+                                                  123:   ;   bCoefficients[0]  = B0
+                                                  124:   ;   bCoefficients[1]  = B1
+                                                  125:   ;   bCoefficients[2]  = B2
+                                                  126:   ;   bCoefficients[3]  = B3
+                                                  127:   ;   controlHistory[0] = u(n)
+                                                  128:   ;   controlHistory[1] = u(n-1)
+                                                  129:   ;   controlHistory[2] = u(n-2)
+                                                  130:   ;   errorHistory[0]   = e(n)	   => most recent error {(Reference) - (inputSource)}
+                                                  131:   ;   errorHistory[1]   = e(n-1)
+                                                  132:   ;   errorHistory[2]   = e(n-2)
+                                                  133:   ;   errorHistory[3]   = e(n-3)
+                                                  134:   ;   preShift          = prsft	   => pre scaling factor for Q15 normalization purposes
+                                                  135:   ;   postShift         = posft	   => post scaling factor for normalization purposes
+                                                  136:   ;   postScaler        = postScaler => post scaling coefficient for normalization purpose
+                                                  137:   ;
+                                                  138:   ;   Function call inputs:
+                                                  139:   ;   sourceRegister    = ADBUFx     => measured feedback input
+                                                  140:   ;   controlReference  = v_ref	   => reference voltage
+                                                  141:   ;   targetRegister    = PDCx       => output duty cycle
+                                                  142:   ;
+                                                  143:   ;  where:
+                                                  144:   ;
+                                                  145:   ;   aCoefficients, bCoefficients, controlHistory, errorHistory, 
+                                                  146:   ;   preShift and postShift are all members of the data structure SMPS_3P3Z_T.
+                                                  147:   ;
+                                                  148:   ; Input:
+                                                  149:   ;       w0 = Address of SMPS_3P3Z_T data structure
+                                                  150:   ;       w1 = Address of the Source Register (Input)
+                                                  151:   ;       w2 = Control Reference
+                                                  152:   ;       w3 = Address of the Target Register (Output)
+                                                  153:   ; Return:
+                                                  154:   ;       w0 = Address of SMPS_3P3Z_T data structure
+                                                  155:   ;       w1 = Address of the Source Register (Input)
+                                                  156:   ;       w2 = Control Reference
+                                                  157:   ;       w3 = Address of the Target Register (Output)
+                                                  158:   ;
+                                                  159:   ; System resources usage:
+                                                  160:   ;       {w4..w5}		saved, used, restored
+                                                  161:   ;       {w8,w10}		saved, used, restored
+                                                  162:   ;        AccA			used, not restored
+                                                  163:   ;        CORCON			saved, used, restored
+                                                  164:   ;
+                                                  165:   ; Note
+                                                  166:   ;  This function requires CORCON register to be setup in a certain state
+                                                  167:   ;  in order to operate correctly. Due to this requirement, this function
+                                                  168:   ;  will save the CORCON register on the stack in the beginning of the
+                                                  169:   ;  function and restore it before the function returns.
+                                                  170:   ;  After saving the CORCON register, this function writes to all bits of
+                                                  171:   ;  the CORCON register. Thus, for the brief duration when this function is
+                                                  172:   ;  executing, the state of CORCON register may be different from its state
+                                                  173:   ;  as set by the function caller. This may change the CPU core behavior with
+                                                  174:   ;  respect to exception processing latency, DO loop termination, CPU interrupt
+                                                  175:   ;  priority level and DSP-engine behaviour.
+                                                  176:   ;............................................................................
+                                                  177:   
+                                                  178:          .global _SMPS_Controller3P3ZUpdate         ; provide global scope to routine
+                                                  179:   _SMPS_Controller3P3ZUpdate:
+                                                  180:   
+                                                  181:           ; Save working registers.
+001088  781F84     MOV W4, [W15++]                182:           push	w4					; Save register W4
+00108A  781F85     MOV W5, [W15++]                183:           push	w5					; Save register W5
+00108C  781F88     MOV W8, [W15++]                184:           push    w8					; Save register W8
+00108E  781F8A     MOV W10, [W15++]               185:           push    w10					; Save register W10
+001090  F80044     PUSH CORCON                    186:           push    CORCON              ; Save CORCON as it will be modified for fractional computation
+                                                  187:   
+                                                  188:           ; Set up DSP core for signed fractional operation, saturation on accumulator A
+                                                  189:           ; and for write-back instructions from ACCx to WREGx,
+                                                  190:           ; accumulator saturation mode is 1.31
+                                                  191:   
+001092  200E44     MOV #0xE4, W4                  192:           mov  #0x00E4, w4
+001094  880224     MOV W4, CORCON                 193:           mov  w4, _CORCON            ; Initialize the CORCON register with '0xE4' = 0b 1110 0100
+                                                  194:   
+                                                  195:   		; Initialize source input, reference, error history and normalization variables
+                                                  196:   
+001096  900530     MOV [W0+6], W10                197:           mov [w0 + #offsetErrorHistory], w10	 ; w10 = Base Address of _ErrorHistory array  ( e[n], e[n-1], e[n-2], e[n-3] )
+001098  900440     MOV [W0+8], W8                 198:           mov [w0 + #offsetPreShift], w8		 ; Load error amplifier normalization bit-shift step
+                                                  199:   
+                                                  200:   		; Update the error history
+                                                  201:   
+00109A  9002AA     MOV [W10+4], W5                202:   		mov     [w10 + #4], w5				 ; W5 = ErrorHistory[n-2] --> increment base address of w10 by 4-bytes (or 2-words)
+                                                  203:                                                ; w5 now points to ErrorHistory address: ([w10 + #4]
+00109C  980535     MOV W5, [W10+6]                204:   		mov     w5, [w10 + #6]				 ; ErrorHistory[n-3] = W5
+00109E  90029A     MOV [W10+2], W5                205:   		mov     [w10 + #2], w5				 ; W5 = ErrorHistory[n-1]
+0010A0  980525     MOV W5, [W10+4]                206:   		mov     w5, [w10 + #4]				 ; ErrorHistory[n-2] = W5
+0010A2  90028A     MOV [W10+0], W5                207:   		mov     [w10 + #0], w5				 ; W5 = ErrorHistory[n]
+0010A4  980515     MOV W5, [W10+2]                208:   		mov     w5, [w10 + #2] 				 ; ErrorHistory[n-1] = W5
+                                                  209:   
+                                                  210:   		; Calculate most recent error with normalization,
+                                                  211:   
+0010A6  510291     SUB W2, [W1], W5               212:   		sub w2, [w1], w5       ; w5 = Reference - inputSource ( subtract [w1] from w2 and store result to w5 )
+0010A8  DD2A88     SL W5, W8, W5                  213:   		sl	w5, w8, w5		   ; shift error by PRE_SHIFT (5) value to the left (Q15 scaling)
+                                                  214:                                  ; shift w5 by w8 (32)value and store result in w5
+                                                  215:   
+                                                  216:   		; Store most recent error to error history array
+0010AA  780D05     MOV W5, [W10]                  217:   		mov 	w5, [w10]							; controller3P3Z.errorHistory[n] = w5
+                                                  218:                                                       ; move contents in register w5 to address pointed to by w10
+                                                  219:   		; Initialize B coefficients array
+                                                  220:   
+0010AC  900410     MOV [W0+2], W8                 221:           mov [w0 + #offsetBCoefficients], w8			; w8  = Base Address of _BCoefficients array (B0, B1, B2, B3)
+                                                  222:   
+                                                  223:           ; Calculate first section of 2P2Z controller -> Error History
+0010AE  C30446     CLR A, [W8]+=2, W4, [W10]+=2, W5224:           clr     a, [w8]+=2, w4, [w10]+=2, w5            ; ACCA = EMPTY
+                                                  225:           												; w4   = B0, w5   = e[0]
+0010B0  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5226:           mac     w4*w5, a, [w8]+=2, w4, [w10]+=2, w5     ; ACCA = B0 * e[n]
+                                                  227:                                                           ; w4   = B1, w5 = e[n-1]
+0010B2  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5228:           mac     w4*w5, a, [w8]+=2, w4, [w10]+=2, w5     ; ACCA = B0 * e[n] + B1 * e[n-1]
+                                                  229:                                                           ; w4   = B2, w5 = e[n-2]
+0010B4  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5230:           mac     w4*w5, a, [w8]+=2, w4, [w10]+=2, w5		; ACCA = B0 * e[n] + B1 * e[n-1] + B2 * e[n-2]
+                                                  231:                                                           ; w4   = B3, w5 = e[n-3]
+0010B6  C00112     MAC W4*W5, A                   232:           mac     w4*w5, a								; ACCA = B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  233:   
+                                                  234:   
+                                                  235:   		; Initialize A coefficients and control history arrays
+                                                  236:   
+0010B8  900400     MOV [W0+0], W8                 237:   		mov 	[w0 + #offsetACoefficients],  w8		; w8  = Base Address of _ACoefficients array  (A1, A2, A3)
+0010BA  900520     MOV [W0+4], W10                238:   		mov 	[w0 + #offsetControlHistory], w10		; w10 = Base Address of _ControlHistory array (y[n-1], y[n-2], y[n-3])
+                                                  239:   
+                                                  240:   
+                                                  241:           ; Calculate second section of 2P2Z controller - Controller History
+0010BC  C70446     MOVSAC A, [W8]+=2, W4, [W10]+=2, W5242:   		movsac	a, [w8]+=2, w4, [w10]+=2, w5			; w4  = A1, w5 = y[n-1]
+0010BE  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5243:   		mac     w4*w5, a, [w8]+=2, w4, [w10]+=2, w5     ; ACCA = A1 * y[n-1] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  244:                                                           ; w4   = A2, w5 = y[n-2]
+0010C0  C00402     MAC W4*W5, A, [W8], W4, [W10], W5245:   		mac     w4*w5, a, [w8], w4, [w10], w5           ; ACCA = A1 * y[n-1] + A2 * y[n-2] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  246:                                                           ; w4   = A3, w5 = y[n-3]
+0010C2  C00112     MAC W4*W5, A                   247:   		mac     w4*w5, a								; ACCA = A1 * y[n-1] + A2 * y[n-2] + A3 * y[n-3] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  248:   
+                                                  249:   		; Backwards normalization & write back
+0010C4  9002D0     MOV [W0+10], W5                250:   		mov		[w0 + #offsetPostShift], w5				; w5 = Normalization Shift to compensate coefficient scaling
+0010C6  C80005     SFTAC A, W5                    251:   		sftac	a, w5									; Backward normalization to compensate coefficient scaling
+0010C8  CD0004     SAC.R A, W4                    252:           sac.r   a, #0, w4                               ; w4 = Sat(Rnd(ACCAH))
+                                                  253:   
+                                                  254:           ; Initialize Scale-factor and multiply
+0010CA  9002E0     MOV [W0+12], W5                255:   		mov 	[w0 + #offsetPostScaler],  w5			; w5 = postScaler
+0010CC  C00113     MPY W4*W5, A                   256:           mpy		w4*w5, a								; Multiply control output and scale-factor
+0010CE  CD0004     SAC.R A, W4                    257:   		sac.r   a, w4                               	; w4 = Sat(Rnd(ACCAH))
+                                                  258:   
+                                                  259:   		; Update the controller output history on the delay line
+                                                  260:   
+0010D0  97BAFA     MOV [W10-2], W5                261:   		mov     [w10 + #-2], w5			; W5 = ControlHistory[n-2]
+0010D2  780D05     MOV W5, [W10]                  262:   		mov     w5, [w10]               ; ControlHistory[n-3] = W5
+0010D4  97BAEA     MOV [W10-4], W5                263:   		mov     [w10 + #-4], w5			; W5 = ControlHistory[n-1]
+0010D6  9FBD75     MOV W5, [W10-2]                264:           mov     w5, [w10 + #-2]			; ControlHistory[n-2] = W5
+0010D8  9FBD64     MOV W4, [W10-4]                265:           mov     w4, [w10 + #-4]			; ControlHistory[n]   = w2
+                                                  266:   
+                                                  267:   		; Clamp controller output to min/max values if needed
+0010DA  9002F0     MOV [W0+14], W5                268:           mov 	[w0 + #offsetMinOutput], w5
+0010DC  E62015     CPSGT W4, W5                   269:   		cpsgt	w4, w5
+0010DE  780205     MOV W5, W4                     270:           mov.w   w5, w4
+0010E0  900A80     MOV [W0+16], W5                271:           mov 	[w0 + #offsetMaxOutput], w5
+0010E2  E6A015     CPSLT W4, W5                   272:   		cpslt	w4, w5
+0010E4  780205     MOV W5, W4                     273:           mov.w   w5, w4
+                                                  274:   
+                                                  275:   		; Controller write back into target register
+0010E6  780984     MOV W4, [W3]                   276:   		mov w4, [w3]							; write result into target register
+                                                  277:   
+                                                  278:   		; restore registers
+                                                  279:   
+0010E8  F90044     POP CORCON                     280:           pop     CORCON                  ; restore CORCON.
+0010EA  78054F     MOV [--W15], W10               281:           pop     w10                     ; restore working register W10
+0010EC  78044F     MOV [--W15], W8                282:           pop     w8						; restore working register W8
+0010EE  7802CF     MOV [--W15], W5                283:           pop     w5						; restore working register W5
+0010F0  78024F     MOV [--W15], W4                284:           pop     w4						; restore working register W4
+                                                  285:   
+                                                  286:   
+0010F2  060000     RETURN                         287:           return
+                                                  288:   
+                                                  289:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  290:   
+                                                  291:   
+                                                  292:          .global _SMPS_Controller3P3Z         ; provide global scope to routine
+                                                  293:   _SMPS_Controller3P3Z:
+0010F4  F80044     PUSH CORCON                    294:       push CORCON
+                                                  295:   
+                                                  296:       ; Set up DSP core for signed fractional operation, saturation on accumulator A
+                                                  297:       ; and for write-back instructions from ACCx to WREGx,
+                                                  298:       ; accumulator saturation mode is 1.31
+0010F6  88022E     MOV W14, CORCON                299:       mov  w14, _CORCON            ; Initialize the CORCON register
+                                                  300:   
+                                                  301:       ; Calculate most recent error with normalization,
+0010F8  500291     SUB W0, [W1], W5               302:       sub w0, [w1], w5       ; w5 = Reference - inputSource
+0010FA  DD2A83     SL W5, W3, W5                  303:       sl	w5, w3, w5		   ; shift error by PRE_SHIFT
+                                                  304:   
+                                                  305:       ; Store most recent error to error history array
+0010FC  780D05     MOV W5, [W10]                  306:       mov 	w5, [w10]       ; errorHistory[n] = w5
+                                                  307:   
+                                                  308:       ; Calculate first section of 3P3Z controller -> Error History
+0010FE  C30646     CLR A, [W9]+=2, W4, [W10]+=2, W5309:       clr     a, [w9]+=2, w4, [w10]+=2, w5            ; ACCA = EMPTY
+                                                  310:                                                       ; w4   = B0, w5   = e[0]
+001100  C00646     MAC W4*W5, A, [W9]+=2, W4, [W10]+=2, W5311:       mac     w4*w5, a, [w9]+=2, w4, [w10]+=2, w5     ; ACCA = B0 * e[n]
+                                                  312:                                                       ; w4   = B1, w5 = e[n-1]
+001102  C00646     MAC W4*W5, A, [W9]+=2, W4, [W10]+=2, W5313:       mac     w4*w5, a, [w9]+=2, w4, [w10]+=2, w5     ; ACCA = B0 * e[n] + B1 * e[n-1]
+                                                  314:                                                       ; w4   = B2, w5 = e[n-2]
+001104  C00602     MAC W4*W5, A, [W9], W4, [W10], W5315:       mac     w4*w5, a, [w9], w4, [w10], w5           ; ACCA = B0 * e[n] + B1 * e[n-1] + B2 * e[n-2]
+                                                  316:                                                       ; w4   = B3, w5 = e[n-3]
+001106  C01352     MAC W4*W5, A, [W9]-=6, W5      317:       mac     w4*w5, a, [w9]-=6, w5					; ACCA = B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  318:                                                       ; Reset BCoefficients 
+                                                  319:   
+                                                  320:       ; Calculate second section of 3P3Z controller - Controller History
+001108  C70466     MOVSAC A, [W8]+=2, W4, [W11]+=2, W5321:       movsac	a, [w8]+=2, w4, [w11]+=2, w5			; w4  = A1, w5 = y[n-1]
+00110A  C00466     MAC W4*W5, A, [W8]+=2, W4, [W11]+=2, W5322:       mac     w4*w5, a, [w8]+=2, w4, [w11]+=2, w5     ; ACCA = A1 * y[n-1] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  323:                                                       ; w4   = A2, w5 = y[n-2]
+00110C  C00422     MAC W4*W5, A, [W8], W4, [W11], W5324:       mac     w4*w5, a, [w8], w4, [w11], w5           ; ACCA = A1 * y[n-1] + A2 * y[n-2] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  325:                                                       ; w4   = A3, w5 = y[n-3]
+00110E  C01192     MAC W4*W5, A, [W8]-=4, W5      326:       mac     w4*w5, a, [w8]-=4, w5					; ACCA = A1 * y[n-1] + A2 * y[n-2] + A3 * y[n-3] + B0 * e[n] + B1 * e[n-1] + B2 * e[n-2] + B3 * e[n-3]
+                                                  327:                                                       ; reset address of A coefficient
+                                                  328:   
+                                                  329:       ; Backwards normalization & write back
+001110  C80006     SFTAC A, W6                    330:       sftac	a, w6									; Backward normalization to compensate coefficient scaling
+001112  CD0004     SAC.R A, W4                    331:       sac.r   a, #0, w4                               ; w4 = Sat(Rnd(ACCAH))
+                                                  332:   
+                                                  333:       ;mpy		w4*w7, a, [w9]-=2, w5                	; Multiply control output and Finish reset of BCoefficients
+001114  C20113     MPY W4*W7, A                   334:       mpy		w4*w7, a                                ; Multiply control output
+001116  CD0004     SAC.R A, W4                    335:       sac.r   a, w4                               	; w4 = Sat(Rnd(ACCAH))
+                                                  336:   
+                                                  337:       ; Update the controller output history on the delay line (Reset Address of w11)
+001118  7802CB     MOV [--W11], W5                338:       mov     [--w11], w5         ; W5 = ControlHistory[n-2]
+00111A  980595     MOV W5, [W11+2]                339:       mov     w5, [w11 + #2]      ; ControlHistory[n-3] = W5
+00111C  7802CB     MOV [--W11], W5                340:       mov     [--w11], w5         ; W5 = ControlHistory[n-1]
+00111E  980595     MOV W5, [W11+2]                341:       mov     w5, [w11 + #2]      ; ControlHistory[n-2] = W5
+001120  780D84     MOV W4, [W11]                  342:       mov     w4, [w11]           ; ControlHistory[n-1] = CurrentOutput
+                                                  343:   
+                                                  344:       ; Clamp controller output to min/max values if needed
+                                                  345:       ; W12 Min, W13 Max
+001122  E6201C     CPSGT W4, W12                  346:       cpsgt	w4, w12
+001124  78020C     MOV W12, W4                    347:       mov.w   w12, w4
+                                                  348:   
+001126  E6A01D     CPSLT W4, W13                  349:       cpslt	w4, w13
+001128  78020D     MOV W13, W4                    350:       mov.w   w13, w4
+                                                  351:   
+                                                  352:       ; Controller write back into target register
+00112A  780904     MOV W4, [W2]                   353:       mov w4, [w2]				; write result into target register
+                                                  354:   
+                                                  355:       ; Update the error history (Reset address of w10)
+00112C  7802CA     MOV [--W10], W5                356:       mov     [--w10], w5         ; w5 = ErrorHistory[n-2]
+00112E  980515     MOV W5, [W10+2]                357:       mov     w5, [w10 + #2]      ; ErrorHistory[n-3] = ErrorHistory[n-2]
+001130  7802CA     MOV [--W10], W5                358:       mov     [--w10], w5         ; w5 = ErrorHistory[n-1]
+001132  980515     MOV W5, [W10+2]                359:       mov     w5, [w10 + #2]      ; ErrorHistory[n-2] = ErrorHistory[n-1]
+001134  7802CA     MOV [--W10], W5                360:       mov     [--w10], w5         ; w5 = ErrorHistory[n]
+001136  980515     MOV W5, [W10+2]                361:       mov     w5, [w10 + #2]      ; ErrorHistory[n-1] = ErrorHistory[n]
+                                                  362:   
+                                                  363:   
+001138  F90044     POP CORCON                     364:       pop CORCON
+00113A  060000     RETURN                         365:       return
+                                                  366:   
+                                                  367:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  368:   ; _SMPS_Controller3P3ZInitialize:
+                                                  369:   ;
+                                                  370:   ; Prototype:
+                                                  371:   ; void SMPS_Controller3P3ZInitialize ( SMPS_3P3Z_T *controller3P3ZStruct )
+                                                  372:   ;
+                                                  373:   ; Operation: This routine clears the delay line elements in the arrays
+                                                  374:   ;            _ControlHistory and _ErrorHistory.
+                                                  375:   ;
+                                                  376:   ; Input:
+                                                  377:   ;       w0 = Address of data structure SMPS_3P3Z_T (type defined in smps_control.h)
+                                                  378:   ;
+                                                  379:   ; Return:
+                                                  380:   ;       (void)
+                                                  381:   ;
+                                                  382:   ; System resources usage:
+                                                  383:   ;       w0      saved, used, restored
+                                                  384:   ;
+                                                  385:   ;............................................................................
+                                                  386:   
+                                                  387:   	.global _SMPS_Controller3P3ZInitialize                ; provide global scope to routine
+                                                  388:   
+                                                  389:   _SMPS_Controller3P3ZInitialize:
+                                                  390:   
+                                                  391:   		; Clean up controlHistory variables
+00113C  781F80     MOV W0, [W15++]                392:           push	w0									; Save w0
+00113E  900020     MOV [W0+4], W0                 393:           mov     [w0 + #offsetControlHistory], w0	; Set up pointer to the base of
+                                                  394:   		                                        	; controlHistory variables within SMPS_3P3Z_T
+001140  EB1800     CLR [W0++]                     395:           clr     [w0++]                  	; ControlHistory[n-1] = 0
+001142  EB1800     CLR [W0++]                     396:           clr     [w0++]                  	; ControlHistory[n-2] = 0
+001144  EB0800     CLR [W0]                       397:           clr     [w0]                    	; ControlHistory[n-3] = 0
+001146  78004F     MOV [--W15], W0                398:   		pop		w0							; Restore pointer to base of SMPS_3P3Z_T
+                                                  399:   
+                                                  400:           ; Clean up errorHistory variables
+001148  781F80     MOV W0, [W15++]                401:           push	w0							; Save w0
+00114A  900030     MOV [W0+6], W0                 402:           mov [w0 + #offsetErrorHistory], w0	; w0 = Address of _ErrorHistory array (e[n], e[n-1], e[n-2], e[n-3])
+                                                  403:   
+00114C  EB1800     CLR [W0++]                     404:           clr     [w0++]                  	; ErrorHistory[n]   = 0
+00114E  EB1800     CLR [W0++]                     405:           clr     [w0++]                 		; ErrorHistory[n-1] = 0
+001150  EB1800     CLR [W0++]                     406:           clr     [w0++]                  	; ErrorHistory[n-2] = 0
+001152  EB0800     CLR [W0]                       407:           clr     [w0]                    	; ErrorHistory[n-3] = 0
+001154  78004F     MOV [--W15], W0                408:           pop     w0							; Restore pointer to base of SMPS_3P3Z_T
+                                                  409:   
+001156  060000     RETURN                         410:           return
+                                                  411:   
+                                                  412:   
+                                                  413:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  414:   
+                                                  415:           .end
+                                                  416:   
+                                                  417:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  418:   ; EOF
+                                                  419:   
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/main.c
+1:                 ////////////////////////////////////////////////////////////////////////////////
+2:                 // © 2014 Microchip Technology Inc.
+3:                 //
+4:                 // MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any
+5:                 // derivatives created by any person or entity by or on your behalf, exclusively
+6:                 // with Microchip's products.  Microchip and its licensors retain all ownership
+7:                 // and intellectual property rights in the accompanying software and in all
+8:                 // derivatives here to.
+9:                 //
+10:                // This software and any accompanying information is for suggestion only.  It
+11:                // does not modify Microchip's standard warranty for its products.  You agree
+12:                // that you are solely responsible for testing the software and determining its
+13:                // suitability.  Microchip has no obligation to modify, test, certify, or
+14:                // support the software.
+15:                //
+16:                // THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER
+17:                // EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+18:                // WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR
+19:                // PURPOSE APPLY TO THIS SOFTWARE, ITS INTERACTION WITH MICROCHIP'S PRODUCTS,
+20:                // COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION.
+21:                //
+22:                // IN NO EVENT, WILL MICROCHIP BE LIABLE, WHETHER IN CONTRACT, WARRANTY, TORT
+23:                // (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), STRICT LIABILITY,
+24:                // INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+25:                // EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF
+26:                // ANY KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWSOEVER CAUSED, EVEN IF
+27:                // MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.
+28:                // TO THE FULLEST EXTENT ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL
+29:                // CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF
+30:                // FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+31:                //
+32:                // MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
+33:                // TERMS.
+34:                ////////////////////////////////////////////////////////////////////////////////
+35:                
+36:                #include "main.h"
+37:                #include "isr.h"
+38:                
+39:                _FOSCSEL(FNOSC_FRC)
+40:                _FOSC(FCKSM_CSECMD & OSCIOFNC_ON)
+41:                _FWDT(WDTEN_OFF)
+42:                _FICD(ICS_PGD2 & JTAGEN_OFF)
+43:                _FDEVOPT(PWMLOCK_OFF)
+44:                
+45:                uint8_t LCDselect = 0,     faultDisplayCnt = 0;
+46:                uint16_t LCD_BuckLoad = 0, LCD_BoostLoad   = 0;
+47:                
+48:                #if(BUCKLOAD1 != EXTERNALLOAD)
+49:                char LCD_buckStr1[17]  = "Buck 0.00V 0.00W";  // LCD text templates
+50:                #else
+51:                char LCD_buckStr1[17]  = "Buck 0.00V EXTRN";
+52:                #endif
+53:                
+54:                #if(BOOSTLOAD1 != EXTERNALLOAD)
+55:                char LCD_boostStr1[17] = "Bst 00.00V 0.00W";
+56:                #else
+57:                char LCD_boostStr1[17]  = "Bst 00.00V EXTRN";
+58:                #endif
+59:                
+60:                char Vin_str[17]  = "V_Input:       V";
+61:                
+62:                // Temp Display Templates when converters enabled
+63:                char BuckTemp_str[17]  =   "Buck Temp:     C";
+64:                char BoostTemp_str[17] =   "Boost Temp:    C";
+65:                char ambientTemp_str[17] = "Amb Temp:      C";
+66:                
+67:                char* Temp_str;
+68:                
+69:                #if((BUCK == DISABLED)&&(BOOST == ENABLED))
+70:                uint8_t anaMuxSetting = 1;
+71:                #else
+72:                uint8_t anaMuxSetting = 0;
+73:                #endif
+74:                
+75:                extern uint16_t buckVoltage, boostVoltage, inputVoltage, tempSense;
+76:                extern uint16_t refreshLCD;
+77:                extern uint8_t  I2CLoadWrite;
+78:                
+79:                extern DPSK_FLAGS dpskFlags;
+80:                extern DPSK_FAULTS dpskFaultFlags;
+81:                
+82:                int main(void)
+83:                {
+00077C  FA0000     LNK #0x0
+84:                    (Nop());
+00077E  000000     NOP
+85:                    (Nop());
+000780  000000     NOP
+86:                
+87:                    dpskFaultFlags.systemFaults = 0;    // Clear all flags
+000782  EB0200     CLR W4
+000784  8886C4     MOV W4, dpskFaultFlags
+88:                
+89:                    // I/O pin controls analog MUX for temp sense selection:
+90:                    // 0 = BUCK temp sensor
+91:                    // 1 = BOOST temp sensor
+92:                    TRISBbits.TRISB13 = 0;
+000786  A9AE11     BCLR 0xE11, #5
+93:                    LATBbits.LATB13 = anaMuxSetting;
+000788  210FA4     MOV #0x10FA, W4
+00078A  784214     MOV.B [W4], W4
+00078C  624261     AND.B W4, #0x1, W4
+00078E  FB8204     ZE W4, W4
+000790  620261     AND W4, #0x1, W4
+000792  DD224D     SL W4, #13, W4
+000794  8070A6     MOV LATB, W6
+000796  2DFFF5     MOV #0xDFFF, W5
+000798  630285     AND W6, W5, W5
+00079A  720205     IOR W4, W5, W4
+00079C  8870A4     MOV W4, LATB
+94:                
+95:                    initClock();            // Initialize Primary and Auxiliary oscillators
+00079E  07020A     RCALL initClock
+96:                
+97:                    initI2C();              // Initialize communication to MCP23008 for load control
+0007A0  07023F     RCALL initI2C
+98:                                            // Also sets initial load for the converters
+99:                
+100:                   initTimer();            // Initialize timer for load dynamics
+0007A2  070282     RCALL initTimer
+101:               
+102:                   initCMP();              // Initialize comparators to be used for cycle-by-cycle protection
+0007A4  0702FE     RCALL initCMP
+103:                   initADC();              // Configures ADC for reading input voltage, output voltages
+0007A6  07030B     RCALL initADC
+104:                                           // load currents, and temperature
+105:               
+106:                   // This function also displays initial startup messages
+107:                   LCD_Init();             // Initialize LCD
+0007A8  07041B     RCALL LCD_Init
+108:               
+109:                   TRISBbits.TRISB11 = 0;
+0007AA  A96E11     BCLR 0xE11, #3
+110:                   IO_DRV = 0;
+0007AC  A96E15     BCLR 0xE15, #3
+111:               
+112:                   // Setup PWM resolution and Period
+113:                   PTPER = PERIODVALUE;    // Switching Frequency of Buck/Boost Converters
+0007AE  20A874     MOV #0xA87, W4
+0007B0  886024     MOV W4, PTPER
+114:                   PTCON2bits.PCLKDIV = (PWMRESOLUTION-1); // PWM Resolution
+0007B2  806014     MOV PTCON2, W4
+0007B4  A10004     BCLR W4, #0
+0007B6  A11004     BCLR W4, #1
+0007B8  A12004     BCLR W4, #2
+0007BA  886014     MOV W4, PTCON2
+115:               
+116:                   #if (BUCK == ENABLED)
+117:                       buckDrive();                // PWM Setup for Buck converter
+0007BC  070278     RCALL buckDrive
+118:               
+119:                       #if(OPENLOOP == 0)
+120:                           initBuckComp();         // Initialize Buck compensator
+0007BE  070388     RCALL initBuckComp
+121:                           dpskFlags.buckSSActive = ENABLED;
+0007C0  A810DA     BSET dpskFlags, #0
+122:                       #endif
+123:                   #else
+124:                       // Need to clear IOCON to enure PWML is not 100% DC as PENL enabled at
+125:                       // device reset
+126:                       IOCON1 = 0x0000;
+127:               
+128:                   #endif
+129:               
+130:                   #if (BOOST == ENABLED)
+131:                       boostDrive();               // PWM Setup for Boost converter
+132:               
+133:                       #if(OPENLOOP == 0)
+134:                           initBoostComp();        // Initialize Boost compensator
+135:                           dpskFlags.boostSSActive = ENABLED;
+136:                       #endif
+137:                   #else
+138:                       // Need to clear IOCON to enure PWML is not 100% DC as PENL enabled at
+139:                       // device reset
+140:                       IOCON2 = 0x0000;
+0007C2  EB0200     CLR W4
+0007C4  886214     MOV W4, IOCON2
+141:               
+142:                   #endif
+143:               
+144:                   PTCONbits.PTEN = 1;     // Enable the PWM
+0007C6  A8EC01     BSET 0xC01, #7
+145:               
+146:                   __delay_us(3);          // Wait one PWM cycle then give ownership
+0007C8  200D20     MOV #0xD2, W0
+0007CA  200001     MOV #0x0, W1
+0007CC  0704FA     RCALL ___delay32
+147:               
+148:                   #if (BUCK == ENABLED)
+149:                       // To eliminate PWM glitch at start-up (Errata), enable PWM module
+150:                       // and then give PWM ownership of the pin
+151:                       IOCON1bits.PENH  = 1;       // PWM1H is controlled by PWM module
+0007CE  A8EC23     BSET 0xC23, #7
+152:                       IOCON1bits.PENL  = 1;       // PWM1L is controlled by PWM module
+0007D0  A8CC23     BSET 0xC23, #6
+153:               
+154:                       IEC6bits.ADCAN1IE = 1;	    // Enable ADC AN1 interrupt
+0007D2  A8E82D     BSET 0x82D, #7
+155:                       ADIELbits.IE1 = 1;
+0007D4  A82320     BSET ADIEL, #1
+156:               
+157:                       IEC6bits.ADCAN0IE = 1;	    // Enable ADC AN0 interrupt
+0007D6  A8C82D     BSET 0x82D, #6
+158:                       ADIELbits.IE0 = 1;
+0007D8  A80320     BSET ADIEL, #0
+159:               
+160:                   #endif
+161:               
+162:                   #if(BOOST == ENABLED)
+163:                       IEC7bits.ADCAN3IE = 1;           // Enable AN3 interrupt
+164:                       ADIELbits.IE3 = 1;
+165:                   #endif
+166:               
+167:                   // Initial load settings to be displayed on LCD
+168:                   #if(BOOSTLOAD1 != EXTERNALLOAD)
+169:                   LCD_BoostLoad = BOOSTLOAD1LCD;
+0007DA  200AF4     MOV #0xAF, W4
+0007DC  8887B4     MOV W4, LCD_BoostLoad
+170:                   #endif
+171:               
+172:                   #if(BUCKLOAD1 != EXTERNALLOAD)
+173:                   LCD_BuckLoad = BUCKLOAD1LCD;
+0007DE  200AF4     MOV #0xAF, W4
+0007E0  8887A4     MOV W4, LCD_BuckLoad
+174:                   #endif
+175:               
+176:                   PR3 = TMR3PERIOD;      
+0007E2  2041A4     MOV #0x41A, W4
+0007E4  880874     MOV W4, PR3
+177:                   T3CONbits.TCKPS = TMR3SCALER;
+0007E6  800894     MOV T3CON, W4
+0007E8  A14004     BCLR W4, #4
+0007EA  A15004     BCLR W4, #5
+0007EC  880894     MOV W4, T3CON
+178:                   IPC2bits.T3IP = 5;
+0007EE  804224     MOV IPC2, W4
+0007F0  A00004     BSET W4, #0
+0007F2  A11004     BCLR W4, #1
+0007F4  A02004     BSET W4, #2
+0007F6  884224     MOV W4, IPC2
+179:                   IEC0bits.T3IE = 1;
+0007F8  A80821     BSET 0x821, #0
+180:                   T3CONbits.TON = 1;              // Enabled Timer
+0007FA  A8E113     BSET 0x113, #7
+0007FC  370003     BRA 0x804
+181:               
+182:                   while(1)
+183:                   {
+184:               
+185:                       IO_DRV = ~IO_DRV;
+000804  8070A4     MOV LATB, W4
+000806  DE224B     LSR W4, #11, W4
+000808  624261     AND.B W4, #0x1, W4
+00080A  EAC204     COM.B W4, W4
+00080C  624261     AND.B W4, #0x1, W4
+00080E  FB8204     ZE W4, W4
+000810  620261     AND W4, #0x1, W4
+000812  DD224B     SL W4, #11, W4
+000814  8070A6     MOV LATB, W6
+000816  2F7FF5     MOV #0xF7FF, W5
+000818  630285     AND W6, W5, W5
+00081A  720205     IOR W4, W5, W4
+00081C  8870A4     MOV W4, LATB
+186:               
+187:                     if(ADSTATLbits.AN1RDY == 1)
+00081E  801984     MOV ADSTATL, W4
+000820  620262     AND W4, #0x2, W4
+000822  520FE0     SUB W4, #0x0, [W15]
+000824  32000D     BRA Z, 0x840
+188:                     {
+189:                         IO_DRV = ~ IO_DRV;
+000826  8070A4     MOV LATB, W4
+000828  DE224B     LSR W4, #11, W4
+00082A  624261     AND.B W4, #0x1, W4
+00082C  EAC204     COM.B W4, W4
+00082E  624261     AND.B W4, #0x1, W4
+000830  FB8204     ZE W4, W4
+000832  620261     AND W4, #0x1, W4
+000834  DD224B     SL W4, #11, W4
+000836  8070A6     MOV LATB, W6
+000838  2F7FF5     MOV #0xF7FF, W5
+00083A  630285     AND W6, W5, W5
+00083C  720205     IOR W4, W5, W4
+00083E  8870A4     MOV W4, LATB
+190:                     }
+191:                       
+192:                     checkButton_SW1();                // Button pressed?
+000840  070029     RCALL checkButton_SW1
+193:               
+194:                      if(refreshLCD >= LCD_REFRESHCOUNT)
+000842  808685     MOV refreshLCD, W5
+000844  261A74     MOV #0x61A7, W4
+000846  528F84     SUB W5, W4, [W15]
+000848  36FFDA     BRA LEU, 0x7FE
+195:                      {
+196:                        refreshLCD = 0;
+00084A  EB0200     CLR W4
+00084C  888684     MOV W4, refreshLCD
+197:               
+198:                        faultDisplayCnt++;
+00084E  210F34     MOV #0x10F3, W4
+000850  784214     MOV.B [W4], W4
+000852  E84204     INC.B W4, W4
+000854  FD0200     EXCH W0, W4
+000856  B7F0F3     MOV.B WREG, faultDisplayCnt
+000858  FD0200     EXCH W0, W4
+199:               
+200:                        if((dpskFaultFlags.systemFaults != 0) && (faultDisplayCnt == 4))
+00085A  8086C4     MOV dpskFaultFlags, W4
+00085C  520FE0     SUB W4, #0x0, [W15]
+00085E  320006     BRA Z, 0x86C
+000860  210F34     MOV #0x10F3, W4
+000862  784214     MOV.B [W4], W4
+000864  524FE4     SUB.B W4, #0x4, [W15]
+000866  3A0002     BRA NZ, 0x86C
+201:                        {
+202:                          LCD_DisplayFault();
+000868  070033     RCALL LCD_DisplayFault
+00086A  37000B     BRA 0x882
+203:                        }
+204:                        else
+205:                        {
+206:                              if(dpskFaultFlags.inputVoltage == 1)
+00086C  8086C4     MOV dpskFaultFlags, W4
+00086E  620261     AND W4, #0x1, W4
+000870  520FE0     SUB W4, #0x0, [W15]
+000872  320006     BRA Z, 0x880
+207:                              {
+208:                                   LCDselect = 1;          // During input voltage fault, force LCD to show fault & Vin/temp screen
+000874  B3C014     MOV.B #0x1, W4
+000876  FD0200     EXCH W0, W4
+000878  B7F0F2     MOV.B WREG, LCDselect
+00087A  FD0200     EXCH W0, W4
+209:                                   LCD_Refresh();
+00087C  070057     RCALL LCD_Refresh
+00087E  370001     BRA 0x882
+210:                              }
+211:                              else
+212:                              {
+213:                                   LCD_Refresh();         // Normal operation
+000880  070055     RCALL LCD_Refresh
+214:                              }
+215:                         }
+216:               
+217:                         if(faultDisplayCnt > 4)
+000882  210F34     MOV #0x10F3, W4
+000884  784214     MOV.B [W4], W4
+000886  524FE4     SUB.B W4, #0x4, [W15]
+000888  36FFBC     BRA LEU, 0x802
+218:                         {
+219:                           faultDisplayCnt = 0;
+00088A  EB4200     CLR.B W4
+00088C  FD0200     EXCH W0, W4
+00088E  B7F0F3     MOV.B WREG, faultDisplayCnt
+000890  FD0200     EXCH W0, W4
+220:                         }
+221:                       }
+222:               
+223:                   } // End of While loop
+0007FE  000000     NOP
+000800  370001     BRA 0x804
+000802  000000     NOP
+000892  37FFB8     BRA 0x804
+224:               
+225:                   return 0;
+226:               }
+227:               
+228:               ///////////////////////////////////////////////////////////////////////////////
+229:                // Function: checkButton_SW1()
+230:                //
+231:                // Preconditions : None
+232:                //
+233:                // Overview:       Check if the push button SW1 is pressed
+234:                //
+235:                // Input:          None.
+236:                //
+237:                // Output:         None.
+238:                //
+239:                //////////////////////////////////////////////////////////////////////////////
+240:               
+241:               
+242:               void checkButton_SW1()
+243:               {
+000894  FA0000     LNK #0x0
+244:                 // Button Changes LCD Displayed information every time it is pressed
+245:                 if (!SW1)			  // if S1 is pressed
+000896  807095     MOV PORTB, W5
+000898  201004     MOV #0x100, W4
+00089A  628204     AND W5, W4, W4
+00089C  520FE0     SUB W4, #0x0, [W15]
+00089E  3A0016     BRA NZ, 0x8CC
+246:                 {
+247:                   while (!SW1)	          // Wait for key release
+0008A0  370003     BRA 0x8A8
+0008A8  807095     MOV PORTB, W5
+0008AA  201004     MOV #0x100, W4
+0008AC  628204     AND W5, W4, W4
+0008AE  520FE0     SUB W4, #0x0, [W15]
+0008B0  32FFF8     BRA Z, 0x8A2
+248:                   __delay_ms(DEBOUNCE_DELAY);	  // Add some debounce delay
+0008A2  25CC00     MOV #0x5CC0, W0
+0008A4  200151     MOV #0x15, W1
+0008A6  07048D     RCALL ___delay32
+249:               
+250:                   LCDselect++;
+0008B2  210F24     MOV #0x10F2, W4
+0008B4  784214     MOV.B [W4], W4
+0008B6  E84204     INC.B W4, W4
+0008B8  FD0200     EXCH W0, W4
+0008BA  B7F0F2     MOV.B WREG, LCDselect
+0008BC  FD0200     EXCH W0, W4
+251:               
+252:                   if(LCDselect > 1)
+0008BE  210F24     MOV #0x10F2, W4
+0008C0  784214     MOV.B [W4], W4
+0008C2  524FE1     SUB.B W4, #0x1, [W15]
+0008C4  360003     BRA LEU, 0x8CC
+253:                   {
+254:                       LCDselect = 0;            // Reset Push-button count
+0008C6  EB4200     CLR.B W4
+0008C8  780004     MOV W4, W0
+0008CA  B7F0F2     MOV.B WREG, LCDselect
+255:                   }
+256:                 }
+257:               }
+0008CC  FA8000     ULNK
+0008CE  060000     RETURN
+258:               
+259:               ////////////////////////////////////////////////////////////////////////////////
+260:                // Function: LCD_DisplayFault()
+261:                //
+262:                // Preconditions : None.
+263:                //
+264:                // Overview: Display fault condition or warnings on LCD screen when fault
+265:                //           occurs.
+266:                //
+267:                // Input: None.
+268:                //
+269:                // Output: None.
+270:                //
+271:                ///////////////////////////////////////////////////////////////////////////////
+272:               void LCD_DisplayFault()
+273:               {
+0008D0  FA0000     LNK #0x0
+274:                 
+275:                 lcd_goto(0,0); // Starting at position (0,0)
+0008D2  EB4080     CLR.B W1
+0008D4  EB4000     CLR.B W0
+0008D6  070350     RCALL lcd_goto
+276:               
+277:                 // If both input voltage and Temp faults occur, LCD will only display fault
+278:                 // for input voltage as this is the more critical fault.
+279:               
+280:                   if(dpskFaultFlags.inputVoltage == 1)
+0008D8  8086C4     MOV dpskFaultFlags, W4
+0008DA  620261     AND W4, #0x1, W4
+0008DC  520FE0     SUB W4, #0x0, [W15]
+0008DE  320008     BRA Z, 0x8F0
+281:                   {
+282:                     lcd_putstr(" INPUT VOLTAGE  ");
+0008E0  286AA0     MOV #0x86AA, W0
+0008E2  070370     RCALL lcd_putstr
+283:                     lcd_goto(0,1);
+0008E4  B3C011     MOV.B #0x1, W1
+0008E6  EB4000     CLR.B W0
+0008E8  070347     RCALL lcd_goto
+284:                     lcd_putstr("     FAULT      ");
+0008EA  286BB0     MOV #0x86BB, W0
+0008EC  07036B     RCALL lcd_putstr
+0008EE  37001C     BRA 0x928
+285:                   }
+286:                   else if(dpskFaultFlags.overTemp == 1)
+0008F0  8086C4     MOV dpskFaultFlags, W4
+0008F2  620270     AND W4, #0x10, W4
+0008F4  520FE0     SUB W4, #0x0, [W15]
+0008F6  32000D     BRA Z, 0x912
+287:                   {
+288:                     lcd_putstr(" OVER TEMP FAULT ");
+0008F8  286CC0     MOV #0x86CC, W0
+0008FA  070364     RCALL lcd_putstr
+289:                     lcd_goto(0,1);
+0008FC  B3C011     MOV.B #0x1, W1
+0008FE  EB4000     CLR.B W0
+000900  07033B     RCALL lcd_goto
+290:                     lcd_putstr(" LOADS DISABLED  ");
+000902  286DE0     MOV #0x86DE, W0
+000904  07035F     RCALL lcd_putstr
+291:               
+292:                     // Turn off loads due to over-temperature condition:
+293:                     I2CLoadWrite    = 0x00;  // Configure Buck loads to be off
+000906  EB4200     CLR.B W4
+000908  FD0200     EXCH W0, W4
+00090A  B7F0F0     MOV.B WREG, I2CLoadWrite
+00090C  FD0200     EXCH W0, W4
+294:                     I2C1CON1bits.SEN = 1;     // Initiate start sequence
+00090E  A80200     BSET I2C1CONL, #0
+000910  37000B     BRA 0x928
+295:                   }
+296:                   else if(dpskFaultFlags.tempWarning == 1)
+000912  8086C4     MOV dpskFaultFlags, W4
+000914  620268     AND W4, #0x8, W4
+000916  520FE0     SUB W4, #0x0, [W15]
+000918  320007     BRA Z, 0x928
+297:                   {
+298:                     lcd_putstr("HIGH TEMPERATURE ");
+00091A  286F00     MOV #0x86F0, W0
+00091C  070353     RCALL lcd_putstr
+299:                     lcd_goto(0,1);
+00091E  B3C011     MOV.B #0x1, W1
+000920  EB4000     CLR.B W0
+000922  07032A     RCALL lcd_goto
+300:                     lcd_putstr("     WARNING     ");
+000924  287020     MOV #0x8702, W0
+000926  07034E     RCALL lcd_putstr
+301:                   }
+302:               }
+000928  FA8000     ULNK
+00092A  060000     RETURN
+303:               
+304:               
+305:               ///////////////////////////////////////////////////////////////////////////////
+306:                // Function: LCD_Refresh()
+307:                //
+308:                // Preconditions : LCD_init()
+309:                //
+310:                // Overview: The function measures and updates LCD displayed information
+311:                //
+312:                // Input: None.
+313:                // Output: None.
+314:                //////////////////////////////////////////////////////////////////////////////
+315:               void LCD_Refresh()
+316:               {
+00092C  FA0008     LNK #0x8
+317:                   uint16_t LCDBuckVo      = 0, LCDBoostVo = 0;
+00092E  EB0200     CLR W4
+000930  780F04     MOV W4, [W14]
+000932  EB0200     CLR W4
+000934  980714     MOV W4, [W14+2]
+318:                   uint16_t LCDVinMeasured = 0, LCDTempC   = 0;
+000936  EB0200     CLR W4
+000938  980724     MOV W4, [W14+4]
+00093A  EB0200     CLR W4
+00093C  980734     MOV W4, [W14+6]
+319:               
+320:                   lcd_goto(0,0);
+00093E  EB4080     CLR.B W1
+000940  EB4000     CLR.B W0
+000942  07031A     RCALL lcd_goto
+321:               
+322:                   if(LCDselect == 0)	// Default LCD Display
+000944  210F24     MOV #0x10F2, W4
+000946  784214     MOV.B [W4], W4
+000948  524FE0     SUB.B W4, #0x0, [W15]
+00094A  3A0040     BRA NZ, 0x9CC
+323:                   {
+324:                     // Write to strings template and update with measurements
+325:                     // LCD_str1 "Buck 0.00V 0.00W";
+326:                     // LCD_str2 "BST 00.00V 0.00W";
+327:               
+328:                     // Disable loads if overtemperature fault is set
+329:                      if(dpskFaultFlags.overTemp == 1)
+00094C  8086C4     MOV dpskFaultFlags, W4
+00094E  620270     AND W4, #0x10, W4
+000950  520FE0     SUB W4, #0x0, [W15]
+000952  320005     BRA Z, 0x95E
+330:                     {
+331:                       #if(BOOSTLOAD1 != EXTERNALLOAD)
+332:                       LCD_BoostLoad = NOLOAD;
+000954  EB0200     CLR W4
+000956  8887B4     MOV W4, LCD_BoostLoad
+333:                       #endif
+334:               
+335:                       #if(BUCKLOAD1 != EXTERNALLOAD)
+336:                       LCD_BuckLoad  = NOLOAD;
+000958  EB0200     CLR W4
+00095A  8887A4     MOV W4, LCD_BuckLoad
+00095C  370004     BRA 0x966
+337:                       #endif
+338:                     }
+339:                     else
+340:                     {
+341:                       #if(BUCKLOAD1 != EXTERNALLOAD)
+342:                       if(BUCKDYNAMICLOAD == DISABLED)
+343:                       LCD_BuckLoad  = BUCKLOAD1LCD;
+00095E  200AF4     MOV #0xAF, W4
+000960  8887A4     MOV W4, LCD_BuckLoad
+344:                       #endif
+345:               
+346:                       #if(BOOSTLOAD1 != EXTERNALLOAD)
+347:                       if(BOOSTDYNAMICLOAD == DISABLED)
+348:                       LCD_BoostLoad = BOOSTLOAD1LCD;
+000962  200AF4     MOV #0xAF, W4
+000964  8887B4     MOV W4, LCD_BoostLoad
+349:                       #endif
+350:                     }
+351:               
+352:                     // Factor to display Buck/Boost Voltage on LCD
+353:                     LCDBuckVo = (__builtin_mulss(buckVoltage, VBUCK_LCD_FACTOR)>>15);
+000966  808624     MOV buckVoltage, W4
+000968  20DA45     MOV #0xDA4, W5
+00096A  B9A205     MUL.SS W4, W5, W4
+00096C  DD2B41     SL W5, #1, W6
+00096E  DE224F     LSR W4, #15, W4
+000970  730204     IOR W6, W4, W4
+000972  DEAACF     ASR W5, #15, W5
+000974  780F04     MOV W4, [W14]
+354:                     ADCShortToString((int)LCDBuckVo, 2, LCD_buckStr1+5);
+000976  78021E     MOV [W14], W4
+000978  210632     MOV #0x1063, W2
+00097A  200021     MOV #0x2, W1
+00097C  780004     MOV W4, W0
+00097E  070054     RCALL ADCShortToString
+355:               
+356:                     #if(BUCKLOAD1 != EXTERNALLOAD)
+357:                     ADCShortToString(LCD_BuckLoad, 2, LCD_buckStr1+11);
+000980  8087A4     MOV LCD_BuckLoad, W4
+000982  210692     MOV #0x1069, W2
+000984  200021     MOV #0x2, W1
+000986  780004     MOV W4, W0
+000988  07004F     RCALL ADCShortToString
+358:                     #endif
+359:               
+360:                     LCDBoostVo = (__builtin_mulss(boostVoltage, VBOOST_LCD_FACTOR)>>15);
+00098A  808654     MOV boostVoltage, W4
+00098C  23F1F5     MOV #0x3F1F, W5
+00098E  B9A205     MUL.SS W4, W5, W4
+000990  DD2B41     SL W5, #1, W6
+000992  DE224F     LSR W4, #15, W4
+000994  730204     IOR W6, W4, W4
+000996  DEAACF     ASR W5, #15, W5
+000998  980714     MOV W4, [W14+2]
+361:                     ADCShortToString((int)LCDBoostVo, 2, LCD_boostStr1+4);
+00099A  90021E     MOV [W14+2], W4
+00099C  210732     MOV #0x1073, W2
+00099E  200021     MOV #0x2, W1
+0009A0  780004     MOV W4, W0
+0009A2  070042     RCALL ADCShortToString
+362:               
+363:                     #if(BOOSTLOAD1 != EXTERNALLOAD)
+364:               
+365:                     ADCShortToString(LCD_BoostLoad, 2, LCD_boostStr1+11);
+0009A4  8087B4     MOV LCD_BoostLoad, W4
+0009A6  2107A2     MOV #0x107A, W2
+0009A8  200021     MOV #0x2, W1
+0009AA  780004     MOV W4, W0
+0009AC  07003D     RCALL ADCShortToString
+366:               
+367:                     #endif
+368:               
+369:               
+370:                     #if((BOOST == DISABLED) && (BUCK == ENABLED))
+371:                   
+372:                     if(dpskFaultFlags.buckSoftStart == 1)
+0009AE  8086C4     MOV dpskFaultFlags, W4
+0009B0  620262     AND W4, #0x2, W4
+0009B2  520FE0     SUB W4, #0x0, [W15]
+0009B4  320003     BRA Z, 0x9BC
+373:                     lcd_putstr("Bck Output Fault");
+0009B6  287140     MOV #0x8714, W0
+0009B8  070305     RCALL lcd_putstr
+0009BA  370002     BRA 0x9C0
+374:               
+375:                     else
+376:                     lcd_putstr(LCD_buckStr1);
+0009BC  2105E0     MOV #0x105E, W0
+0009BE  070302     RCALL lcd_putstr
+377:               
+378:                     lcd_goto(0,1);
+0009C0  B3C011     MOV.B #0x1, W1
+0009C2  EB4000     CLR.B W0
+0009C4  0702D9     RCALL lcd_goto
+379:                     lcd_putstr("Boost: Disabled ");
+0009C6  287250     MOV #0x8725, W0
+0009C8  0702FD     RCALL lcd_putstr
+0009CA  37002C     BRA 0xA24
+380:               
+381:                     #elif((BOOST == ENABLED) && (BUCK == DISABLED))
+382:                 
+383:                     lcd_putstr("Buck:  Disabled ");
+384:               
+385:                     lcd_goto(0,1);
+386:               
+387:                     if(dpskFaultFlags.boostSoftStart == 1)
+388:                     lcd_putstr("Bst Output Fault");
+389:               
+390:                     else
+391:                     lcd_putstr(LCD_boostStr1);
+392:               
+393:                     #elif((BOOST == ENABLED) && (BUCK == ENABLED))
+394:                  
+395:                     if(dpskFaultFlags.buckSoftStart == 1)
+396:                     lcd_putstr("Bck Output Fault");
+397:               
+398:                     else
+399:                     lcd_putstr(LCD_buckStr1);
+400:               
+401:                     lcd_goto(0,1);
+402:               
+403:                     if(dpskFaultFlags.boostSoftStart == 1)
+404:                     lcd_putstr("Bst Output Fault");
+405:               
+406:                     else
+407:                     lcd_putstr(LCD_boostStr1);
+408:               
+409:                     #else
+410:                     // Write to LCD
+411:                     lcd_putstr("Buck:  Disabled ");
+412:                     lcd_goto(0,1);
+413:                     lcd_putstr("Boost: Disabled ");
+414:                     #endif
+415:               
+416:                   }
+417:               
+418:                   // Display Input Voltage and Board Temperature
+419:                   else
+420:                   {
+421:                     // Calculate Input Voltage & Temperature Conversion
+422:                     LCDVinMeasured = (__builtin_mulsu(inputVoltage, VIN_FACTOR)>>15);
+0009CC  808644     MOV inputVoltage, W4
+0009CE  238FB5     MOV #0x38FB, W5
+0009D0  B92205     MUL.SU W4, W5, W4
+0009D2  DD2B41     SL W5, #1, W6
+0009D4  DE224F     LSR W4, #15, W4
+0009D6  730204     IOR W6, W4, W4
+0009D8  DEAACF     ASR W5, #15, W5
+0009DA  980724     MOV W4, [W14+4]
+423:                     LCDTempC = (__builtin_mulss(tempSense - V_0C, TEMPCOEFFICIENT )>>15);
+0009DC  808674     MOV tempSense, W4
+0009DE  B126C4     SUB #0x26C, W4
+0009E0  20A505     MOV #0xA50, W5
+0009E2  B9A205     MUL.SS W4, W5, W4
+0009E4  DD2B41     SL W5, #1, W6
+0009E6  DE224F     LSR W4, #15, W4
+0009E8  730204     IOR W6, W4, W4
+0009EA  DEAACF     ASR W5, #15, W5
+0009EC  980734     MOV W4, [W14+6]
+424:               
+425:                     // Modify String Template and update with Voltage measurements
+426:                     ADCShortToString((int)LCDVinMeasured, 2, Vin_str+11);
+0009EE  90022E     MOV [W14+4], W4
+0009F0  2108B2     MOV #0x108B, W2
+0009F2  200021     MOV #0x2, W1
+0009F4  780004     MOV W4, W0
+0009F6  070018     RCALL ADCShortToString
+427:               
+428:               
+429:                     if((BUCK == ENABLED) && (LATBbits.LATB13 == 0))
+0009F8  8070A5     MOV LATB, W5
+0009FA  220004     MOV #0x2000, W4
+0009FC  628204     AND W5, W4, W4
+0009FE  520FE0     SUB W4, #0x0, [W15]
+000A00  3A0002     BRA NZ, 0xA06
+430:                     { Temp_str = BuckTemp_str;}
+000A02  210914     MOV #0x1091, W4
+000A04  8887C4     MOV W4, Temp_str
+431:               
+432:                     else if((BOOST == ENABLED) && (LATBbits.LATB13 == 1))
+433:                     { Temp_str = BoostTemp_str;}
+434:               
+435:                     else if((BUCK == DISABLED) && (BOOST == DISABLED))
+436:                     { Temp_str = ambientTemp_str;}
+437:               
+438:                     // Modify String Template and update with Temp measurements
+439:                     ADCShortToString((int)LCDTempC, 4, Temp_str+12);
+000A06  8087C4     MOV Temp_str, W4
+000A08  4202EC     ADD W4, #0xC, W5
+000A0A  90023E     MOV [W14+6], W4
+000A0C  780105     MOV W5, W2
+000A0E  200041     MOV #0x4, W1
+000A10  780004     MOV W4, W0
+000A12  07000A     RCALL ADCShortToString
+440:               
+441:                     // Write to LCD
+442:                     lcd_putstr(Vin_str);
+000A14  210800     MOV #0x1080, W0
+000A16  0702D6     RCALL lcd_putstr
+443:                     lcd_goto(0,1);
+000A18  B3C011     MOV.B #0x1, W1
+000A1A  EB4000     CLR.B W0
+000A1C  0702AD     RCALL lcd_goto
+444:                     lcd_putstr(Temp_str);
+000A1E  8087C4     MOV Temp_str, W4
+000A20  780004     MOV W4, W0
+000A22  0702D0     RCALL lcd_putstr
+445:               
+446:                     // Change MUX input to monitor both temp sensors
+447:                     if((BUCK == ENABLED) && (BOOST == ENABLED))
+448:                     {
+449:                       LATBbits.LATB13 ^= 1;
+450:                     }
+451:               
+452:                   }
+453:               }
+000A24  FA8000     ULNK
+000A26  060000     RETURN
+454:               ///////////////////////////////////////////////////////////////////////////////
+455:                // Function: ADCShortToString
+456:                //
+457:                // Preconditions : None.
+458:                //
+459:                // Overview: The function converts integer into string.
+460:                //
+461:                // Input: Value - value to be converted; DotPos - dot position ( can be
+462:                // between 0 and 3, DOTPOS_NONE = 4, if equals DOTPOS_TRAIL_ZEROS = -1 will not
+463:                // put a dot and insert leading zeros); Buffer - receives the result string
+464:                //
+465:                // Output: None.
+466:                //
+467:                //////////////////////////////////////////////////////////////////////////////
+468:               
+469:               void ADCShortToString(int16_t Value, int16_t DotPos, char* Buffer)
+470:               {
+000A28  FA000A     LNK #0xA
+000A2A  980720     MOV W0, [W14+4]
+000A2C  980731     MOV W1, [W14+6]
+000A2E  980742     MOV W2, [W14+8]
+471:                   int8_t  Result = 0;
+000A30  EB4200     CLR.B W4
+000A32  984724     MOV.B W4, [W14+2]
+472:                   int16_t Pos    = 0;
+000A34  EB0200     CLR W4
+000A36  780F04     MOV W4, [W14]
+473:               
+474:                   // Clean Buffer (4 digits + Dot)
+475:                   for(Pos = 0; Pos < 3; Pos++) Buffer[Pos] = ' ';
+000A38  EB0200     CLR W4
+000A3A  780F04     MOV W4, [W14]
+000A3C  370006     BRA 0xA4A
+000A3E  78021E     MOV [W14], W4
+000A40  9002CE     MOV [W14+8], W5
+000A42  428284     ADD W5, W4, W5
+000A44  B3C204     MOV.B #0x20, W4
+000A46  784A84     MOV.B W4, [W5]
+000A48  E80F1E     INC [W14], [W14]
+000A4A  78021E     MOV [W14], W4
+000A4C  520FE2     SUB W4, #0x2, [W15]
+000A4E  34FFF7     BRA LE, 0xA3E
+476:               
+477:                   Pos = 0;  // Reset to initial buffer position
+000A50  EB0200     CLR W4
+000A52  780F04     MOV W4, [W14]
+478:                   if(Pos == DotPos){ *Buffer++ = '0';*Buffer++ = '.';}
+000A54  90023E     MOV [W14+6], W4
+000A56  78029E     MOV [W14], W5
+000A58  528F84     SUB W5, W4, [W15]
+000A5A  3A000C     BRA NZ, 0xA74
+000A5C  9002CE     MOV [W14+8], W5
+000A5E  B3C304     MOV.B #0x30, W4
+000A60  784A84     MOV.B W4, [W5]
+000A62  90024E     MOV [W14+8], W4
+000A64  E80204     INC W4, W4
+000A66  980744     MOV W4, [W14+8]
+000A68  9002CE     MOV [W14+8], W5
+000A6A  B3C2E4     MOV.B #0x2E, W4
+000A6C  784A84     MOV.B W4, [W5]
+000A6E  90024E     MOV [W14+8], W4
+000A70  E80204     INC W4, W4
+000A72  980744     MOV W4, [W14+8]
+479:                   Pos++;
+000A74  E80F1E     INC [W14], [W14]
+480:                   Result = Value/1000;
+000A76  9002AE     MOV [W14+4], W5
+000A78  203E84     MOV #0x3E8, W4
+000A7A  090011     REPEAT #0x11
+000A7C  D80284     DIV.SW W5, W4
+000A7E  780200     MOV W0, W4
+000A80  984724     MOV.B W4, [W14+2]
+481:                   Value -= 1000*Result;
+000A82  90422E     MOV.B [W14+2], W4
+000A84  FB0284     SE W4, W5
+000A86  2FC184     MOV #0xFC18, W4
+000A88  B9AA84     MUL.SS W5, W4, W4
+000A8A  9002AE     MOV [W14+4], W5
+000A8C  428204     ADD W5, W4, W4
+000A8E  980724     MOV W4, [W14+4]
+482:                   if(Result) *Buffer++ = Result + '0';
+000A90  90422E     MOV.B [W14+2], W4
+000A92  524FE0     SUB.B W4, #0x0, [W15]
+000A94  320008     BRA Z, 0xAA6
+000A96  90422E     MOV.B [W14+2], W4
+000A98  B04304     ADD.B #0x30, W4
+000A9A  9002CE     MOV [W14+8], W5
+000A9C  784A84     MOV.B W4, [W5]
+000A9E  90024E     MOV [W14+8], W4
+000AA0  E80204     INC W4, W4
+000AA2  980744     MOV W4, [W14+8]
+000AA4  37000A     BRA 0xABA
+483:                   else if(Pos >= DotPos) *Buffer++ = '0';
+000AA6  90023E     MOV [W14+6], W4
+000AA8  78029E     MOV [W14], W5
+000AAA  528F84     SUB W5, W4, [W15]
+000AAC  350006     BRA LT, 0xABA
+000AAE  9002CE     MOV [W14+8], W5
+000AB0  B3C304     MOV.B #0x30, W4
+000AB2  784A84     MOV.B W4, [W5]
+000AB4  90024E     MOV [W14+8], W4
+000AB6  E80204     INC W4, W4
+000AB8  980744     MOV W4, [W14+8]
+484:               
+485:                   if(Pos == DotPos) *Buffer++ = '.'; Pos++;
+000ABA  90023E     MOV [W14+6], W4
+000ABC  78029E     MOV [W14], W5
+000ABE  528F84     SUB W5, W4, [W15]
+000AC0  3A0006     BRA NZ, 0xACE
+000AC2  9002CE     MOV [W14+8], W5
+000AC4  B3C2E4     MOV.B #0x2E, W4
+000AC6  784A84     MOV.B W4, [W5]
+000AC8  90024E     MOV [W14+8], W4
+000ACA  E80204     INC W4, W4
+000ACC  980744     MOV W4, [W14+8]
+000ACE  E80F1E     INC [W14], [W14]
+486:                   Result = Value/100;
+000AD0  9002AE     MOV [W14+4], W5
+000AD2  200644     MOV #0x64, W4
+000AD4  090011     REPEAT #0x11
+000AD6  D80284     DIV.SW W5, W4
+000AD8  780200     MOV W0, W4
+000ADA  984724     MOV.B W4, [W14+2]
+487:                   Value -= 100*Result;
+000ADC  90422E     MOV.B [W14+2], W4
+000ADE  FB0284     SE W4, W5
+000AE0  2FF9C4     MOV #0xFF9C, W4
+000AE2  B9AA84     MUL.SS W5, W4, W4
+000AE4  9002AE     MOV [W14+4], W5
+000AE6  428204     ADD W5, W4, W4
+000AE8  980724     MOV W4, [W14+4]
+488:                   if(Result) *Buffer++ = Result + '0';
+000AEA  90422E     MOV.B [W14+2], W4
+000AEC  524FE0     SUB.B W4, #0x0, [W15]
+000AEE  320008     BRA Z, 0xB00
+000AF0  90422E     MOV.B [W14+2], W4
+000AF2  B04304     ADD.B #0x30, W4
+000AF4  9002CE     MOV [W14+8], W5
+000AF6  784A84     MOV.B W4, [W5]
+000AF8  90024E     MOV [W14+8], W4
+000AFA  E80204     INC W4, W4
+000AFC  980744     MOV W4, [W14+8]
+000AFE  37000A     BRA 0xB14
+489:                   else if(Pos >= DotPos) *Buffer++ = '0';
+000B00  90023E     MOV [W14+6], W4
+000B02  78029E     MOV [W14], W5
+000B04  528F84     SUB W5, W4, [W15]
+000B06  350006     BRA LT, 0xB14
+000B08  9002CE     MOV [W14+8], W5
+000B0A  B3C304     MOV.B #0x30, W4
+000B0C  784A84     MOV.B W4, [W5]
+000B0E  90024E     MOV [W14+8], W4
+000B10  E80204     INC W4, W4
+000B12  980744     MOV W4, [W14+8]
+490:               
+491:                   if(Pos == DotPos) *Buffer++ = '.'; Pos++;
+000B14  90023E     MOV [W14+6], W4
+000B16  78029E     MOV [W14], W5
+000B18  528F84     SUB W5, W4, [W15]
+000B1A  3A0006     BRA NZ, 0xB28
+000B1C  9002CE     MOV [W14+8], W5
+000B1E  B3C2E4     MOV.B #0x2E, W4
+000B20  784A84     MOV.B W4, [W5]
+000B22  90024E     MOV [W14+8], W4
+000B24  E80204     INC W4, W4
+000B26  980744     MOV W4, [W14+8]
+000B28  E80F1E     INC [W14], [W14]
+492:                   Result = Value/10;
+000B2A  9002AE     MOV [W14+4], W5
+000B2C  2000A4     MOV #0xA, W4
+000B2E  090011     REPEAT #0x11
+000B30  D80284     DIV.SW W5, W4
+000B32  780200     MOV W0, W4
+000B34  984724     MOV.B W4, [W14+2]
+493:                   Value -= 10*Result;
+000B36  90422E     MOV.B [W14+2], W4
+000B38  FB0284     SE W4, W5
+000B3A  2FFF64     MOV #0xFFF6, W4
+000B3C  B9AA84     MUL.SS W5, W4, W4
+000B3E  9002AE     MOV [W14+4], W5
+000B40  428204     ADD W5, W4, W4
+000B42  980724     MOV W4, [W14+4]
+494:                   if(Result) *Buffer++ = Result + '0';
+000B44  90422E     MOV.B [W14+2], W4
+000B46  524FE0     SUB.B W4, #0x0, [W15]
+000B48  320008     BRA Z, 0xB5A
+000B4A  90422E     MOV.B [W14+2], W4
+000B4C  B04304     ADD.B #0x30, W4
+000B4E  9002CE     MOV [W14+8], W5
+000B50  784A84     MOV.B W4, [W5]
+000B52  90024E     MOV [W14+8], W4
+000B54  E80204     INC W4, W4
+000B56  980744     MOV W4, [W14+8]
+000B58  37000A     BRA 0xB6E
+495:                   else if(Pos >= DotPos) *Buffer++ = '0';
+000B5A  90023E     MOV [W14+6], W4
+000B5C  78029E     MOV [W14], W5
+000B5E  528F84     SUB W5, W4, [W15]
+000B60  350006     BRA LT, 0xB6E
+000B62  9002CE     MOV [W14+8], W5
+000B64  B3C304     MOV.B #0x30, W4
+000B66  784A84     MOV.B W4, [W5]
+000B68  90024E     MOV [W14+8], W4
+000B6A  E80204     INC W4, W4
+000B6C  980744     MOV W4, [W14+8]
+496:               
+497:                   if(Pos == DotPos) *Buffer++ = '.'; Pos++;
+000B6E  90023E     MOV [W14+6], W4
+000B70  78029E     MOV [W14], W5
+000B72  528F84     SUB W5, W4, [W15]
+000B74  3A0006     BRA NZ, 0xB82
+000B76  9002CE     MOV [W14+8], W5
+000B78  B3C2E4     MOV.B #0x2E, W4
+000B7A  784A84     MOV.B W4, [W5]
+000B7C  90024E     MOV [W14+8], W4
+000B7E  E80204     INC W4, W4
+000B80  980744     MOV W4, [W14+8]
+000B82  E80F1E     INC [W14], [W14]
+498:                   if(Value) *Buffer++ = Value + '0';
+000B84  90022E     MOV [W14+4], W4
+000B86  520FE0     SUB W4, #0x0, [W15]
+000B88  320009     BRA Z, 0xB9C
+000B8A  90022E     MOV [W14+4], W4
+000B8C  784204     MOV.B W4, W4
+000B8E  B04304     ADD.B #0x30, W4
+000B90  9002CE     MOV [W14+8], W5
+000B92  784A84     MOV.B W4, [W5]
+000B94  90024E     MOV [W14+8], W4
+000B96  E80204     INC W4, W4
+000B98  980744     MOV W4, [W14+8]
+000B9A  37000A     BRA 0xBB0
+499:                   else if(Pos >= DotPos) *Buffer++ = '0';
+000B9C  90023E     MOV [W14+6], W4
+000B9E  78029E     MOV [W14], W5
+000BA0  528F84     SUB W5, W4, [W15]
+000BA2  350006     BRA LT, 0xBB0
+000BA4  9002CE     MOV [W14+8], W5
+000BA6  B3C304     MOV.B #0x30, W4
+000BA8  784A84     MOV.B W4, [W5]
+000BAA  90024E     MOV [W14+8], W4
+000BAC  E80204     INC W4, W4
+000BAE  980744     MOV W4, [W14+8]
+500:               
+501:               }
+000BB0  FA8000     ULNK
+000BB2  060000     RETURN
+502:               
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/lcd.c
+1:                 ////////////////////////////////////////////////////////////////////////////////
+2:                 // © 2014 Microchip Technology Inc.
+3:                 //
+4:                 // MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any
+5:                 // derivatives created by any person or entity by or on your behalf, exclusively
+6:                 // with Microchip?s products.  Microchip and its licensors retain all ownership
+7:                 // and intellectual property rights in the accompanying software and in all
+8:                 // derivatives here to.
+9:                 //
+10:                // This software and any accompanying information is for suggestion only.  It
+11:                // does not modify Microchip?s standard warranty for its products.  You agree
+12:                // that you are solely responsible for testing the software and determining its
+13:                // suitability.  Microchip has no obligation to modify, test, certify, or
+14:                // support the software.
+15:                //
+16:                // THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER
+17:                // EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+18:                // WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR
+19:                // PURPOSE APPLY TO THIS SOFTWARE, ITS INTERACTION WITH MICROCHIP?S PRODUCTS,
+20:                // COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION.
+21:                //
+22:                // IN NO EVENT, WILL MICROCHIP BE LIABLE, WHETHER IN CONTRACT, WARRANTY, TORT
+23:                // (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), STRICT LIABILITY,
+24:                // INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+25:                // EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF
+26:                // ANY KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWSOEVER CAUSED, EVEN IF
+27:                // MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.
+28:                // TO THE FULLEST EXTENT ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL
+29:                // CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF
+30:                // FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+31:                //
+32:                // MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
+33:                // TERMS.
+34:                ////////////////////////////////////////////////////////////////////////////////
+35:                
+36:                #include "lcd.h"
+37:                
+38:                
+39:                const int8_t line_address[] = {LCD_ADDRESS_LINE_1,LCD_ADDRESS_LINE_2};
+40:                
+41:                ///////////////////////////////////////////////////////////////////////////////
+42:                // Function:             SPI_TX
+43:                //
+44:                // PreCondition: 	LCD must be setup.
+45:                //
+46:                // Side Effects: 	Writes to screen
+47:                //
+48:                ///////////////////////////////////////////////////////////////////////////////
+49:                // @ingroup  		LCD
+50:                //
+51:                // @brief    		This function writes to the LCD screen.
+52:                //
+53:                // @note    			Send byte via spi to the lcd
+54:                //
+55:                ///////////////////////////////////////////////////////////////////////////////
+56:                void SPI_TX(uint8_t Command)
+57:                {
+000F32  FA0004     LNK #0x4
+000F34  984720     MOV.B W0, [W14+2]
+58:                  uint8_t mask;
+59:                
+60:                   for(mask = 0x80; mask != 0; mask >>= 1)
+000F36  B3C804     MOV.B #0x80, W4
+000F38  784F04     MOV.B W4, [W14]
+000F3A  370015     BRA 0xF66
+000F5E  78429E     MOV.B [W14], W5
+000F60  FB8205     ZE W5, W4
+000F62  D10204     LSR W4, W4
+000F64  784F04     MOV.B W4, [W14]
+000F66  78421E     MOV.B [W14], W4
+000F68  524FE0     SUB.B W4, #0x0, [W15]
+000F6A  3AFFE8     BRA NZ, 0xF3C
+61:                   {
+62:                     LCD_SCL = LCD_LOW;
+000F3C  A94E15     BCLR 0xE15, #2
+63:                     Nop();
+000F3E  000000     NOP
+64:                     __delay_us(1);
+000F40  200460     MOV #0x46, W0
+000F42  200001     MOV #0x0, W1
+000F44  07013E     RCALL ___delay32
+65:                     if(Command & mask) LCD_SDI = LCD_HIGH; else LCD_SDI = LCD_LOW;
+000F46  90422E     MOV.B [W14+2], W4
+000F48  62421E     AND.B W4, [W14], W4
+000F4A  524FE0     SUB.B W4, #0x0, [W15]
+000F4C  320002     BRA Z, 0xF52
+000F4E  A82E14     BSET LATB, #1
+000F50  370001     BRA 0xF54
+000F52  A92E14     BCLR LATB, #1
+66:                     LCD_SCL = LCD_HIGH;
+000F54  A84E15     BSET 0xE15, #2
+67:                     Nop();
+000F56  000000     NOP
+68:                     __delay_us(1);
+000F58  200460     MOV #0x46, W0
+000F5A  200001     MOV #0x0, W1
+000F5C  070132     RCALL ___delay32
+69:                    }
+70:                    LCD_CS  = LCD_nSELECTED;
+000F6C  A86E15     BSET 0xE15, #3
+71:                
+72:                    __delay_us(50);
+000F6E  20DAC0     MOV #0xDAC, W0
+000F70  200001     MOV #0x0, W1
+000F72  070127     RCALL ___delay32
+73:                }
+000F74  FA8000     ULNK
+000F76  060000     RETURN
+74:                
+75:                
+76:                
+77:                //////////////////////////////////////////////////////////////////////////////
+78:                // Function:             lcd_goto
+79:                //
+80:                // PreCondition: 	None
+81:                //
+82:                // Side Effects: 	Moves cursor.
+83:                //////////////////////////////////////////////////////////////////////////////
+84:                //////////////////////////////////////////////////////////////////////////////
+85:                // @ingroup  		LCD
+86:                //
+87:                // @brief    		This function points to an LCD position.
+88:                //
+89:                // @note    		None
+90:                //
+91:                //////////////////////////////////////////////////////////////////////////////
+92:                void lcd_goto(uint8_t x,uint8_t y)
+93:                {
+000F78  FA0002     LNK #0x2
+000F7A  784F00     MOV.B W0, [W14]
+000F7C  984711     MOV.B W1, [W14+1]
+94:                    lcd_putcmd(LCD_DDRAM_ADDRESS((line_address[y] + x)));
+000F7E  90421E     MOV.B [W14+1], W4
+000F80  FB8204     ZE W4, W4
+000F82  287365     MOV #0x8736, W5
+000F84  428204     ADD W5, W4, W4
+000F86  784214     MOV.B [W4], W4
+000F88  42421E     ADD.B W4, [W14], W4
+000F8A  784284     MOV.B W4, W5
+000F8C  B3C804     MOV.B #0x80, W4
+000F8E  72C204     IOR.B W5, W4, W4
+000F90  784004     MOV.B W4, W0
+000F92  070069     RCALL lcd_putcmd
+95:                }
+000F94  FA8000     ULNK
+000F96  060000     RETURN
+96:                
+97:                //////////////////////////////////////////////////////////////////////////////
+98:                // Function:             lcd_clear
+99:                //
+100:               // PreCondition: 	None
+101:               //
+102:               // Side Effects: 	Clears LCD
+103:               //
+104:               //
+105:               // @ingroup  		LCD
+106:               //
+107:               // @brief    		This function clears the LCD screen.
+108:               //
+109:               // @note    		None
+110:               //
+111:               //////////////////////////////////////////////////////////////////////////////
+112:               void lcd_clear(void)
+113:               {
+000F98  FA0000     LNK #0x0
+114:                   lcd_putcmd(LCD_CLEAR);   //clear
+000F9A  B3C010     MOV.B #0x1, W0
+000F9C  070064     RCALL lcd_putcmd
+115:                   __delay_us(20);
+000F9E  205780     MOV #0x578, W0
+000FA0  200001     MOV #0x0, W1
+000FA2  07010F     RCALL ___delay32
+116:               }
+000FA4  FA8000     ULNK
+000FA6  060000     RETURN
+117:               
+118:               //////////////////////////////////////////////////////////////////////////////
+119:               // Function:             lcd_putline
+120:               //
+121:               // PreCondition: 	None
+122:               //
+123:               // Side Effects: 	None
+124:               ///
+125:               ///
+126:               // @ingroup  		LCD
+127:               //
+128:               // @brief    		This function sends an LCD message.
+129:               //
+130:               // @note    		Sends LCD message and line location
+131:               //
+132:               //////////////////////////////////////////////////////////////////////////////
+133:               void lcd_putline(uint8_t l, const char *buffer)
+134:               {
+000FA8  FA0004     LNK #0x4
+000FAA  784F00     MOV.B W0, [W14]
+000FAC  980711     MOV W1, [W14+2]
+135:                   lcd_putcmd(line_address[l]);
+000FAE  78429E     MOV.B [W14], W5
+000FB0  FB8205     ZE W5, W4
+000FB2  287365     MOV #0x8736, W5
+000FB4  428204     ADD W5, W4, W4
+000FB6  784214     MOV.B [W4], W4
+000FB8  784004     MOV.B W4, W0
+000FBA  070055     RCALL lcd_putcmd
+136:                   lcd_putstr(buffer);
+000FBC  90001E     MOV [W14+2], W0
+000FBE  070002     RCALL lcd_putstr
+137:               }
+000FC0  FA8000     ULNK
+000FC2  060000     RETURN
+138:               
+139:               //////////////////////////////////////////////////////////////////////////////
+140:               // Function:             lcd_putstr
+141:               //
+142:               // PreCondition: 	None
+143:               //
+144:               // Side Effects: 	Writes message to LCD
+145:               //
+146:               //
+147:               // @ingroup  		LCD
+148:               //
+149:               // @brief    		This function writes a string to the LCD.
+150:               //
+151:               // @note    		Write data to LCD up to null
+152:               //
+153:               //////////////////////////////////////////////////////////////////////////////
+154:               void lcd_putstr(const char *s)
+155:               {
+000FC4  FA0002     LNK #0x2
+000FC6  780F00     MOV W0, [W14]
+156:                   while(*s)              
+000FC8  370005     BRA 0xFD4
+000FD4  78021E     MOV [W14], W4
+000FD6  784214     MOV.B [W4], W4
+000FD8  524FE0     SUB.B W4, #0x0, [W15]
+000FDA  3AFFF7     BRA NZ, 0xFCA
+157:                   {
+158:               	lcd_putchar(*s++); 
+000FCA  78021E     MOV [W14], W4
+000FCC  784214     MOV.B [W4], W4
+000FCE  E80F1E     INC [W14], [W14]
+000FD0  784004     MOV.B W4, W0
+000FD2  070051     RCALL lcd_putchar
+159:                   }
+160:               }
+000FDC  FA8000     ULNK
+000FDE  060000     RETURN
+161:               
+162:               /////////////////////////////////////////////////////////////////////////////
+163:               // Function:         LCD_Init
+164:               //
+165:               // PreCondition: 	None
+166:               //
+167:               // Side Effects: 	Sets up LCD
+168:               //
+169:               //
+170:               // @ingroup  		LCD
+171:               //
+172:               // @brief    		This function initialises the LCD.
+173:               //
+174:               // @note    		None
+175:               //
+176:               //////////////////////////////////////////////////////////////////////////////
+177:               void LCD_Init(void)
+178:               {
+000FE0  FA0000     LNK #0x0
+179:                  TRIS_LCD_RST   = 0;
+000FE2  A9EE11     BCLR 0xE11, #7
+180:                  TRIS_LCD_CS    = 0;
+000FE4  A96E11     BCLR 0xE11, #3
+181:                  TRIS_LCD_RS    = 0;
+000FE6  A9AE10     BCLR TRISB, #5
+182:               
+183:                  TRIS_LCD_SDI   = 0;
+000FE8  A92E10     BCLR TRISB, #1
+184:                  TRIS_LCD_SCL   = 0;
+000FEA  A94E11     BCLR 0xE11, #2
+185:                  
+186:                  LCD_RST        = 0;  // RESET
+000FEC  A9EE15     BCLR 0xE15, #7
+187:                  __delay_ms(25);
+000FEE  2B3F00     MOV #0xB3F0, W0
+000FF0  2001A1     MOV #0x1A, W1
+000FF2  0700E7     RCALL ___delay32
+188:                
+189:               
+190:                  LCD_RST        = 1;  // end reset
+000FF4  A8EE15     BSET 0xE15, #7
+191:                 
+192:                  lcd_putcmd(LCD_FUNCTION | FUNCTION_8BITS | FUNCTION_1_HIGH | FUNCTION_1_LINE | FUNCTION_nIS);   //function set
+000FF6  B3C300     MOV.B #0x30, W0
+000FF8  070036     RCALL lcd_putcmd
+193:                
+194:                  __delay_ms(25);
+000FFA  2B3F00     MOV #0xB3F0, W0
+000FFC  2001A1     MOV #0x1A, W1
+000FFE  0700E1     RCALL ___delay32
+195:               
+196:                  lcd_putcmd(LCD_FUNCTION | FUNCTION_8BITS | FUNCTION_1_HIGH | FUNCTION_1_LINE | FUNCTION_nIS);   //function set
+001000  B3C300     MOV.B #0x30, W0
+001002  070031     RCALL lcd_putcmd
+197:                  lcd_putcmd(LCD_FUNCTION | FUNCTION_8BITS | FUNCTION_1_HIGH | FUNCTION_1_LINE | FUNCTION_nIS);   //function set
+001004  B3C300     MOV.B #0x30, W0
+001006  07002F     RCALL lcd_putcmd
+198:               
+199:                  // Enter the second page of instructions
+200:                  lcd_putcmd(LCD_FUNCTION | FUNCTION_8BITS | FUNCTION_1_HIGH | FUNCTION_2_LINE | FUNCTION_IS);   //function set
+001008  B3C390     MOV.B #0x39, W0
+00100A  07002D     RCALL lcd_putcmd
+201:                  lcd_putcmd(LCD_OSC_FREQ | BIAS_1_5 | FREQ_CNTRL(4));   //internal osc frequency
+00100C  B3C140     MOV.B #0x14, W0
+00100E  07002B     RCALL lcd_putcmd
+202:                  lcd_putcmd(LCD_PWR_CONTROL | nICON | BOOSTLCD | CONTRAST(2));   //power control
+001010  B3C560     MOV.B #0x56, W0
+001012  070029     RCALL lcd_putcmd
+203:                  lcd_putcmd(LCD_FOLLOWER_ON | FOLLOWER_GAIN(5));   //follower control
+001014  B3C6D0     MOV.B #0x6D, W0
+001016  070027     RCALL lcd_putcmd
+204:                  lcd_putcmd(LCD_CONTRAST(0));   //contrast
+001018  B3C700     MOV.B #0x70, W0
+00101A  070025     RCALL lcd_putcmd
+205:                  // leave second instruction page
+206:                  
+207:                  //lcd_putcmd(LCD_FUNCTION | FUNCTION_8BITS | FUNCTION_1_HIGH | FUNCTION_2_LINE | FUNCTION_nIS);   //function set
+208:                  lcd_putcmd(LCD_DISPLAY_ON | CURSOR_OFF | BLINK_OFF);           //display on
+00101C  B3C0C0     MOV.B #0xC, W0
+00101E  070023     RCALL lcd_putcmd
+209:                  lcd_putcmd(LCD_ENTRY_MODE | CURSOR_nSHIFT | DATA_INCREMENT);   //entry mode
+001020  B3C060     MOV.B #0x6, W0
+001022  070021     RCALL lcd_putcmd
+210:                  lcd_putcmd(LCD_CLEAR);   //clear
+001024  B3C010     MOV.B #0x1, W0
+001026  07001F     RCALL lcd_putcmd
+211:               
+212:                  __delay_ms(150);
+001028  237A00     MOV #0x37A0, W0
+00102A  200A01     MOV #0xA0, W1
+00102C  0700CA     RCALL ___delay32
+213:               
+214:                  // Load LCD Startup Display
+215:                  lcd_goto(0,0);
+00102E  EB4080     CLR.B W1
+001030  EB4000     CLR.B W0
+001032  07FFA2     RCALL lcd_goto
+216:                  lcd_putstr(" Digital Power  ");
+001034  287380     MOV #0x8738, W0
+001036  07FFC6     RCALL lcd_putstr
+217:                  lcd_goto(0,1);
+001038  B3C011     MOV.B #0x1, W1
+00103A  EB4000     CLR.B W0
+00103C  07FF9D     RCALL lcd_goto
+218:                  lcd_putstr("  Starter Kit   ");
+00103E  287490     MOV #0x8749, W0
+001040  07FFC1     RCALL lcd_putstr
+219:                  __delay_ms(1500);
+001042  22C400     MOV #0x2C40, W0
+001044  206421     MOV #0x642, W1
+001046  0700BD     RCALL ___delay32
+220:                  lcd_goto(0,0);
+001048  EB4080     CLR.B W1
+00104A  EB4000     CLR.B W0
+00104C  07FF95     RCALL lcd_goto
+221:                  lcd_putstr("   MICROCHIP    ");
+00104E  2875A0     MOV #0x875A, W0
+001050  07FFB9     RCALL lcd_putstr
+222:                  lcd_goto(0,1);
+001052  B3C011     MOV.B #0x1, W1
+001054  EB4000     CLR.B W0
+001056  07FF90     RCALL lcd_goto
+223:                  lcd_putstr("dsPIC33EP32GS202");
+001058  2876B0     MOV #0x876B, W0
+00105A  07FFB4     RCALL lcd_putstr
+224:                  __delay_ms(1000);
+00105C  21D800     MOV #0x1D80, W0
+00105E  2042C1     MOV #0x42C, W1
+001060  0700B0     RCALL ___delay32
+225:                
+226:               }
+001062  FA8000     ULNK
+001064  060000     RETURN
+227:               
+228:               /////////////////////////////////////////////////////////////////////////////
+229:               // Function:             lcd_putcmd
+230:               //
+231:               // PreCondition: 	None
+232:               //
+233:               // Side Effects: 	Sends command to the LCD.
+234:               //
+235:               //
+236:               // @ingroup  		LCD
+237:               //
+238:               // @brief    		This function sends a command to the LCD.
+239:               //
+240:               // @note    		Send comand byte to the lcd
+241:               //
+242:               //////////////////////////////////////////////////////////////////////////////
+243:               void lcd_putcmd(uint8_t Command)
+244:               {		
+001066  FA0002     LNK #0x2
+001068  784F00     MOV.B W0, [W14]
+245:                  LCD_CS = LCD_SELECTED;
+00106A  A96E15     BCLR 0xE15, #3
+246:                  LCD_RS = LCD_RS_COMMAND;
+00106C  A9AE14     BCLR LATB, #5
+247:                  SPI_TX(Command);
+00106E  78401E     MOV.B [W14], W0
+001070  07FF60     RCALL SPI_TX
+248:               }
+001072  FA8000     ULNK
+001074  060000     RETURN
+249:               
+250:               //////////////////////////////////////////////////////////////////////////////
+251:               // Function:             lcd_putchar
+252:               //
+253:               // PreCondition: 	None
+254:               //
+255:               // Side Effects: 	Puts character on LCD
+256:               //
+257:               //
+258:               // @ingroup  		LCD
+259:               //
+260:               // @brief    		This function puts a character onto the screen.
+261:               //
+262:               // @note    		Write data to the lcd
+263:               //
+264:               //////////////////////////////////////////////////////////////////////////////
+265:               void lcd_putchar(const char c)
+266:               {
+001076  FA0002     LNK #0x2
+001078  784F00     MOV.B W0, [W14]
+267:                  LCD_CS = LCD_SELECTED;
+00107A  A96E15     BCLR 0xE15, #3
+268:                  LCD_RS = LCD_RS_DATA;
+00107C  A8AE14     BSET LATB, #5
+269:                  SPI_TX(c);
+00107E  78421E     MOV.B [W14], W4
+001080  784004     MOV.B W4, W0
+001082  07FF57     RCALL SPI_TX
+270:               }
+001084  FA8000     ULNK
+001086  060000     RETURN
+271:               //----------------------------------------------------------------------------
+272:               
+273:               
+274:               
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/isr.c
+1:                 ////////////////////////////////////////////////////////////////////////////////
+2:                 // © 2014 Microchip Technology Inc.
+3:                 //
+4:                 // MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any
+5:                 // derivatives created by any person or entity by or on your behalf, exclusively
+6:                 // with Microchip's products.  Microchip and its licensors retain all ownership
+7:                 // and intellectual property rights in the accompanying software and in all
+8:                 // derivatives here to.
+9:                 //
+10:                // This software and any accompanying information is for suggestion only.  It
+11:                // does not modify Microchip's standard warranty for its products.  You agree
+12:                // that you are solely responsible for testing the software and determining its
+13:                // suitability.  Microchip has no obligation to modify, test, certify, or
+14:                // support the software.
+15:                //
+16:                // THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER
+17:                // EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+18:                // WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR
+19:                // PURPOSE APPLY TO THIS SOFTWARE, ITS INTERACTION WITH MICROCHIP'S PRODUCTS,
+20:                // COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION.
+21:                //
+22:                // IN NO EVENT, WILL MICROCHIP BE LIABLE, WHETHER IN CONTRACT, WARRANTY, TORT
+23:                // (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), STRICT LIABILITY,
+24:                // INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+25:                // EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF
+26:                // ANY KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWSOEVER CAUSED, EVEN IF
+27:                // MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.
+28:                // TO THE FULLEST EXTENT ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL
+29:                // CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF
+30:                // FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+31:                //
+32:                // MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
+33:                // TERMS.
+34:                ////////////////////////////////////////////////////////////////////////////////
+35:                
+36:                #include "isr.h"
+37:                
+38:                extern uint8_t I2CLoadWrite, I2CRegAddr;
+39:                extern uint16_t LCD_BoostLoad, LCD_BuckLoad;
+40:                
+41:                extern SMPS_3P3Z_T buckVoltage3P3Z;
+42:                extern SMPS_3P3Z_T boostVoltage3P3Z;
+43:                
+44:                uint16_t buckVoltage  = 0, buckCurrent  = 0, inputVoltage = 0;
+45:                uint16_t boostVoltage = 0, boostCurrent = 0;
+46:                uint16_t tempSense    = 0, refreshLCD   = 0;
+47:                
+48:                int16_t buckControlReference = 0, boostControlReference = 0;
+49:                uint8_t messageComplete = 0;
+50:                
+51:                DPSK_FAULTS dpskFaultFlags;
+52:                DPSK_FLAGS  dpskFlags;
+53:                
+54:                
+55:                void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt()
+56:                {
+0002D2  781F80     MOV W0, [W15++]
+0002D4  781F84     MOV W4, [W15++]
+0002D6  FA0000     LNK #0x0
+57:                    #if(BUCKDYNAMICLOAD == ENABLED)
+58:                
+59:                    if(dpskFlags.buckSSActive == DISABLED)
+60:                    {
+61:                        I2CLoadWrite &= 0x38;           // Clear lower 3-bits for Buck write
+62:                
+63:                        //Code to switch on-board load for dynamic load testing
+64:                        if(dpskFlags.buckDynLoad == 0)
+65:                        {
+66:                            I2CLoadWrite |= I2CBUCKLOAD2WRITE;
+67:                
+68:                            LCD_BuckLoad = BUCKLOAD2LCD;
+69:                            dpskFlags.buckDynLoad = 1;
+70:                        }    
+71:                        else
+72:                        {
+73:                            I2CLoadWrite |= I2CBUCKLOAD1WRITE;
+74:                
+75:                            LCD_BuckLoad = BUCKLOAD1LCD;
+76:                            dpskFlags.buckDynLoad = 0;
+77:                        }
+78:                    }
+79:                    #else
+80:                    I2CLoadWrite |= I2CBUCKLOAD1WRITE;    //Restores load setting after fault
+0002D8  210F04     MOV #0x10F0, W4
+0002DA  784214     MOV.B [W4], W4
+0002DC  B34034     IOR.B #0x3, W4
+0002DE  780004     MOV W4, W0
+0002E0  B7F0F0     MOV.B WREG, I2CLoadWrite
+81:                
+82:                    #endif
+83:                
+84:                    #if(BOOSTDYNAMICLOAD == ENABLED)
+85:                
+86:                    if(dpskFlags.boostSSActive == DISABLED)
+87:                    {
+88:                        I2CLoadWrite &= 0x07;            // Clear bits 4-6 for Boost write
+89:                
+90:                        //Code to switch on-board load for dynamic load testing
+91:                        if(dpskFlags.boostDynLoad == 0)
+92:                        {
+93:                            I2CLoadWrite |= I2CBOOSTLOAD2WRITE;
+94:                
+95:                            LCD_BoostLoad = BOOSTLOAD2LCD;
+96:                            dpskFlags.boostDynLoad = 1;
+97:                        }
+98:                        else
+99:                        {
+100:                           I2CLoadWrite |= I2CBOOSTLOAD1WRITE;
+101:               
+102:                           LCD_BoostLoad = BOOSTLOAD1LCD;
+103:                           dpskFlags.boostDynLoad = 0;
+104:                       }
+105:                   }
+106:                   #else
+107:                   I2CLoadWrite |= I2CBOOSTLOAD1WRITE;    //Restores load setting after fault
+0002E2  210F04     MOV #0x10F0, W4
+0002E4  784214     MOV.B [W4], W4
+0002E6  780004     MOV W4, W0
+0002E8  B7F0F0     MOV.B WREG, I2CLoadWrite
+108:               
+109:                   #endif
+110:                   
+111:                   I2C1CON1bits.SEN = 1;      // Initiate start sequence
+0002EA  A80200     BSET I2C1CONL, #0
+112:               
+113:                   IFS0bits.T1IF = 0;
+0002EC  A96800     BCLR IFS0, #3
+114:               }
+0002EE  FA8000     ULNK
+0002F0  78024F     MOV [--W15], W4
+0002F2  78004F     MOV [--W15], W0
+0002F4  064000     RETFIE
+115:               
+116:               
+117:               void __attribute__((__interrupt__, no_auto_psv)) _MI2C1Interrupt()
+118:               {
+0002F6  781F80     MOV W0, [W15++]
+0002F8  BE9F84     MOV.D W4, [W15++]
+0002FA  BE9F86     MOV.D W6, [W15++]
+0002FC  FA0000     LNK #0x0
+119:                   static int8_t cmd = 0;
+120:               
+121:                   (Nop());
+0002FE  000000     NOP
+122:               
+123:                   switch(cmd)
+000300  210DC4     MOV #0x10DC, W4
+000302  784214     MOV.B [W4], W4
+000304  FB0204     SE W4, W4
+000306  DEA2CF     ASR W4, #15, W5
+000308  200046     MOV #0x4, W6
+00030A  200007     MOV #0x0, W7
+00030C  520F86     SUB W4, W6, [W15]
+00030E  5A8F87     SUBB W5, W7, [W15]
+000310  3E0032     BRA GTU, 0x376
+000312  010604     BRA W4
+000314  370004     BRA 0x31E
+000316  370006     BRA 0x324
+000318  37000F     BRA 0x338
+00031A  370018     BRA 0x34C
+00031C  37001E     BRA 0x35A
+124:                   {
+125:                       case MASTERWRITESLAVEADDR:
+126:                       //Write slave address
+127:                       I2C1TRN = (SLAVEADDRESS << 1) | 0;
+00031E  200404     MOV #0x40, W4
+000320  881064     MOV W4, I2C1TRN
+128:                       break;
+000322  370029     BRA 0x376
+129:               
+130:                       case MASTERWRITESREGADDR:
+131:                      if(I2C1STATbits.ACKSTAT == 0)
+000324  801025     MOV I2C1STAT, W5
+000326  280004     MOV #0x8000, W4
+000328  628204     AND W5, W4, W4
+00032A  520FE0     SUB W4, #0x0, [W15]
+00032C  3A001F     BRA NZ, 0x36C
+132:                       {
+133:                           I2C1TRN =  I2CRegAddr;
+00032E  210F14     MOV #0x10F1, W4
+000330  784214     MOV.B [W4], W4
+000332  FB8204     ZE W4, W4
+000334  881064     MOV W4, I2C1TRN
+134:                       }
+135:               
+136:                       break;
+000336  37001F     BRA 0x376
+00036C  000000     NOP
+00036E  370003     BRA 0x376
+137:               
+138:                       case MASTERWRITESREGDATA:
+139:                           if(I2C1STATbits.ACKSTAT == 0)
+000338  801025     MOV I2C1STAT, W5
+00033A  280004     MOV #0x8000, W4
+00033C  628204     AND W5, W4, W4
+00033E  520FE0     SUB W4, #0x0, [W15]
+000340  3A0017     BRA NZ, 0x370
+140:                           {
+141:                           I2C1TRN = I2CLoadWrite;
+000342  210F04     MOV #0x10F0, W4
+000344  784214     MOV.B [W4], W4
+000346  FB8204     ZE W4, W4
+000348  881064     MOV W4, I2C1TRN
+142:                           }
+143:                       break;
+00034A  370015     BRA 0x376
+000370  000000     NOP
+000372  370001     BRA 0x376
+144:                   
+145:                       case STOPCONDITION:
+146:                            if(I2C1STATbits.ACKSTAT == 0)
+00034C  801025     MOV I2C1STAT, W5
+00034E  280004     MOV #0x8000, W4
+000350  628204     AND W5, W4, W4
+000352  520FE0     SUB W4, #0x0, [W15]
+000354  3A000F     BRA NZ, 0x374
+147:                           {
+148:                               I2C1CON1bits.PEN = 1;
+000356  A84200     BSET I2C1CONL, #2
+149:                            }
+150:                       break;
+000358  37000E     BRA 0x376
+000374  000000     NOP
+151:               
+152:                       case RESET:
+153:                       messageComplete = 1;
+00035A  B3C014     MOV.B #0x1, W4
+00035C  FD0200     EXCH W0, W4
+00035E  B7F0D6     MOV.B WREG, messageComplete
+000360  FD0200     EXCH W0, W4
+154:                       cmd = -1;
+000362  EBC200     SETM.B W4
+000364  FD0200     EXCH W0, W4
+000366  B7F0DC     MOV.B WREG, cmd
+000368  FD0200     EXCH W0, W4
+155:                       break;
+00036A  370005     BRA 0x376
+156:                   }
+157:               
+158:                   cmd++;
+000376  210DC4     MOV #0x10DC, W4
+000378  784214     MOV.B [W4], W4
+00037A  E84204     INC.B W4, W4
+00037C  780004     MOV W4, W0
+00037E  B7F0DC     MOV.B WREG, cmd
+159:               
+160:                   IFS1bits.MI2C1IF = 0;
+000380  A92802     BCLR IFS1, #1
+161:               }
+000382  FA8000     ULNK
+000384  BE034F     MOV.D [--W15], W6
+000386  BE024F     MOV.D [--W15], W4
+000388  78004F     MOV [--W15], W0
+00038A  064000     RETFIE
+162:               
+163:               void __attribute__((__interrupt__, no_auto_psv)) _ADCAN7Interrupt()
+164:               {
+00038C  781F80     MOV W0, [W15++]
+00038E  BE9F84     MOV.D W4, [W15++]
+000390  FA0000     LNK #0x0
+165:                   TMR2 = 0;
+000392  EB0200     CLR W4
+000394  880834     MOV W4, TMR2
+166:                   refreshLCD++;
+000396  808684     MOV refreshLCD, W4
+000398  E80204     INC W4, W4
+00039A  888684     MOV W4, refreshLCD
+167:               
+168:                   // Read Vin and Temperature
+169:                   // AN4 and AN7 triggered by Timer 2 @ 30us
+170:                   inputVoltage = ADCBUF4;
+00039C  8020A4     MOV ADCBUF4, W4
+00039E  888644     MOV W4, inputVoltage
+171:                   tempSense    = ADCBUF7;
+0003A0  8020D4     MOV ADCBUF7, W4
+0003A2  888674     MOV W4, tempSense
+172:               
+173:                   // Check that Vin is within SAFE range, Else override PWM
+174:                   if ((inputVoltage <= INPUTUNDERVOLTAGEADC) || (inputVoltage >= INPUTOVERVOLTAGEADC))
+0003A4  808645     MOV inputVoltage, W5
+0003A6  206244     MOV #0x624, W4
+0003A8  528F84     SUB W5, W4, [W15]
+0003AA  360004     BRA LEU, 0x3B4
+0003AC  808645     MOV inputVoltage, W5
+0003AE  209A54     MOV #0x9A5, W4
+0003B0  528F84     SUB W5, W4, [W15]
+0003B2  36000F     BRA LEU, 0x3D2
+175:                   {
+176:                       IOCON1bits.OVRENH = 1;	// Override the PWM1H - Buck HS FET to inactive state
+0003B4  A82C23     BSET 0xC23, #1
+177:                       IOCON1bits.OVRENL = 1;	// Override the PWM1L - Buck LS FET to inactive state
+0003B6  A80C23     BSET 0xC23, #0
+178:               
+179:                       IOCON2bits.OVRENL = 1;	// Override the PWM2L - Boost FET to inactive state
+0003B8  A80C43     BSET 0xC43, #0
+180:               
+181:                       IEC7bits.ADCAN2IE = 0;
+0003BA  A9082E     BCLR IEC7, #0
+182:                       IEC7bits.ADCAN3IE = 0;
+0003BC  A9282E     BCLR IEC7, #1
+183:                       PDC1             = 0;
+0003BE  EB0200     CLR W4
+0003C0  886134     MOV W4, PDC1
+184:                       PDC2             = 0;
+0003C2  EB0200     CLR W4
+0003C4  886234     MOV W4, PDC2
+185:               
+186:                       dpskFaultFlags.inputVoltage = 1;
+0003C6  A810D8     BSET dpskFaultFlags, #0
+187:               
+188:                       I2CLoadWrite = NOLOAD;    // If fault condition exists, disable ALL loads
+0003C8  EB4200     CLR.B W4
+0003CA  FD0200     EXCH W0, W4
+0003CC  B7F0F0     MOV.B WREG, I2CLoadWrite
+0003CE  FD0200     EXCH W0, W4
+189:                       I2C1CON1bits.SEN = 1;      // Initiate start sequence
+0003D0  A80200     BSET I2C1CONL, #0
+190:                   }
+191:               
+192:                   if ((inputVoltage > INPUTVOLTMINHYST) && (inputVoltage < INPUTVOLTMAXHYST) && (dpskFaultFlags.inputVoltage == 1))
+0003D2  808645     MOV inputVoltage, W5
+0003D4  206944     MOV #0x694, W4
+0003D6  528F84     SUB W5, W4, [W15]
+0003D8  36002E     BRA LEU, 0x436
+0003DA  808645     MOV inputVoltage, W5
+0003DC  209354     MOV #0x935, W4
+0003DE  528F84     SUB W5, W4, [W15]
+0003E0  3E002A     BRA GTU, 0x436
+0003E2  8086C4     MOV dpskFaultFlags, W4
+0003E4  620261     AND W4, #0x1, W4
+0003E6  520FE0     SUB W4, #0x0, [W15]
+0003E8  320026     BRA Z, 0x436
+193:                   {
+194:                       dpskFaultFlags.inputVoltage = 0;
+0003EA  A910D8     BCLR dpskFaultFlags, #0
+195:               
+196:                       #if(BUCK == ENABLED)
+197:               
+198:                           #if(OPENLOOP == DISABLED)
+199:                               buckVoltage3P3Z.controlHistory[0] = 0;
+0003EC  808714     MOV 0x10E2, W4
+0003EE  EB0280     CLR W5
+0003F0  780A05     MOV W5, [W4]
+200:                               buckVoltage3P3Z.controlHistory[1] = 0;
+0003F2  808714     MOV 0x10E2, W4
+0003F4  E88204     INC2 W4, W4
+0003F6  EB0280     CLR W5
+0003F8  780A05     MOV W5, [W4]
+201:                               buckVoltage3P3Z.controlHistory[2] = 0;
+0003FA  808714     MOV 0x10E2, W4
+0003FC  420264     ADD W4, #0x4, W4
+0003FE  EB0280     CLR W5
+000400  780A05     MOV W5, [W4]
+202:               
+203:                               buckVoltage3P3Z.errorHistory[0] = 0;
+000402  808724     MOV 0x10E4, W4
+000404  EB0280     CLR W5
+000406  780A05     MOV W5, [W4]
+204:                               buckVoltage3P3Z.errorHistory[1] = 0;
+000408  808724     MOV 0x10E4, W4
+00040A  E88204     INC2 W4, W4
+00040C  EB0280     CLR W5
+00040E  780A05     MOV W5, [W4]
+205:                               buckVoltage3P3Z.errorHistory[2] = 0;
+000410  808724     MOV 0x10E4, W4
+000412  420264     ADD W4, #0x4, W4
+000414  EB0280     CLR W5
+000416  780A05     MOV W5, [W4]
+206:                               buckVoltage3P3Z.errorHistory[3] = 0;
+000418  808724     MOV 0x10E4, W4
+00041A  420266     ADD W4, #0x6, W4
+00041C  EB0280     CLR W5
+00041E  780A05     MOV W5, [W4]
+207:               
+208:                               buckControlReference = 0;
+000420  EB0200     CLR W4
+000422  888694     MOV W4, buckControlReference
+209:                           #endif
+210:               
+211:                           dpskFlags.buckSSActive = ENABLED;   // Reinitiate softstart
+000424  A810DA     BSET dpskFlags, #0
+212:               
+213:                           IEC7bits.ADCAN2IE  = 1;
+000426  A8082E     BSET IEC7, #0
+214:               
+215:                           IOCON1bits.OVRENH = 0;	   // Remove Override
+000428  A92C23     BCLR 0xC23, #1
+216:                           IOCON1bits.OVRENL = 0;
+00042A  A90C23     BCLR 0xC23, #0
+217:                       #endif
+218:               
+219:                       #if(BOOST == ENABLED)
+220:               
+221:                           #if(OPENLOOP == DISABLED)
+222:                               boostVoltage3P3Z.controlHistory[0] = 0;
+223:                               boostVoltage3P3Z.controlHistory[1] = 0;
+224:                               boostVoltage3P3Z.controlHistory[2] = 0;
+225:               
+226:                               boostVoltage3P3Z.errorHistory[0] = 0;
+227:                               boostVoltage3P3Z.errorHistory[1] = 0;
+228:                               boostVoltage3P3Z.errorHistory[2] = 0;
+229:                               boostVoltage3P3Z.errorHistory[3] = 0;
+230:               
+231:                               boostControlReference = 0;
+232:                           #endif
+233:               
+234:                           dpskFlags.boostSSActive = ENABLED;   // Reinitiate softstart
+235:               
+236:                           IEC7bits.ADCAN3IE  = 1;
+237:                           IOCON2bits.OVRENL = 0;          // Remove Override
+238:               
+239:                        #endif
+240:               
+241:                      // Re-enable loads
+242:                      I2CLoadWrite = (I2CBUCKLOAD1WRITE | I2CBOOSTLOAD1WRITE);
+00042C  B3C034     MOV.B #0x3, W4
+00042E  FD0200     EXCH W0, W4
+000430  B7F0F0     MOV.B WREG, I2CLoadWrite
+000432  FD0200     EXCH W0, W4
+243:                      I2C1CON1bits.SEN = 1;            // Initiate start sequence
+000434  A80200     BSET I2C1CONL, #0
+244:               
+245:                   }
+246:               
+247:                   // Temperature fault check (if 60 C < temp < 80 C)
+248:                   if ((tempSense > WARNINGTEMPADC) && (tempSense < TEMPMAXADC) )
+000436  808675     MOV tempSense, W5
+000438  205554     MOV #0x555, W4
+00043A  528F84     SUB W5, W4, [W15]
+00043C  36000A     BRA LEU, 0x452
+00043E  808675     MOV tempSense, W5
+000440  2064C4     MOV #0x64C, W4
+000442  528F84     SUB W5, W4, [W15]
+000444  3E0006     BRA GTU, 0x452
+249:                   {
+250:                     if(dpskFaultFlags.overTemp == 0)
+000446  8086C4     MOV dpskFaultFlags, W4
+000448  620270     AND W4, #0x10, W4
+00044A  520FE0     SUB W4, #0x0, [W15]
+00044C  3A001D     BRA NZ, 0x488
+000450  37001B     BRA 0x488
+251:                     {
+252:                       // set bit, indicates hi temp warning fault
+253:                       dpskFaultFlags.tempWarning = 1;
+00044E  A870D8     BSET dpskFaultFlags, #3
+254:                     }
+255:                   }
+256:               
+257:                   // if temp > 80 C
+258:                   else if(tempSense > TEMPMAXADC) 
+000452  808675     MOV tempSense, W5
+000454  2064D4     MOV #0x64D, W4
+000456  528F84     SUB W5, W4, [W15]
+000458  360004     BRA LEU, 0x462
+259:                   {
+260:                     // Loads are disabled in main.c due to this condition
+261:                     dpskFaultFlags.overTemp = 1;
+00045A  A890D8     BSET dpskFaultFlags, #4
+262:                     dpskFaultFlags.tempWarning = 0;
+00045C  A970D8     BCLR dpskFaultFlags, #3
+263:               
+264:                     IEC0bits.T1IE = 0;
+00045E  A96820     BCLR IEC0, #3
+000460  370013     BRA 0x488
+265:                   }
+266:               
+267:                   // if temp < ~ 50 C
+268:                   else if ((tempSense <= TEMPREINITADC))
+000462  808675     MOV tempSense, W5
+000464  204D94     MOV #0x4D9, W4
+000466  528F84     SUB W5, W4, [W15]
+000468  3E000F     BRA GTU, 0x488
+269:                   {
+270:               
+271:                     if(dpskFaultFlags.tempWarning == 1)
+00046A  8086C4     MOV dpskFaultFlags, W4
+00046C  620268     AND W4, #0x8, W4
+00046E  520FE0     SUB W4, #0x0, [W15]
+000470  320002     BRA Z, 0x476
+272:                     {
+273:                       // Clear bit to disable 'HI TEMP WARNING' on display
+274:                       dpskFaultFlags.tempWarning = 0;
+000472  A970D8     BCLR dpskFaultFlags, #3
+000474  370009     BRA 0x488
+275:                     }
+276:                     else if (dpskFaultFlags.overTemp == 1)
+000476  8086C4     MOV dpskFaultFlags, W4
+000478  620270     AND W4, #0x10, W4
+00047A  520FE0     SUB W4, #0x0, [W15]
+00047C  320005     BRA Z, 0x488
+277:                     {
+278:                      // Clear bit to disable 'OVER TEMP FAULT' on display
+279:                      dpskFaultFlags.overTemp = 0;
+00047E  A990D8     BCLR dpskFaultFlags, #4
+280:                      
+281:                      // Re-enable loads
+282:                      I2CLoadWrite = (I2CBUCKLOAD1WRITE | I2CBOOSTLOAD1WRITE);
+000480  B3C034     MOV.B #0x3, W4
+000482  780004     MOV W4, W0
+000484  B7F0F0     MOV.B WREG, I2CLoadWrite
+283:                      I2C1CON1bits.SEN = 1;            // Initiate start sequence
+000486  A80200     BSET I2C1CONL, #0
+284:               
+285:                       #if((BUCKDYNAMICLOAD == ENABLED) || (BOOSTDYNAMICLOAD == ENABLED))
+286:                       IEC0bits.T1IE = 1;
+287:                       #endif
+288:                     }
+289:                     
+290:                   }
+291:               
+292:                   IFS7bits.ADCAN7IF = 0;
+000488  A9A80E     BCLR IFS7, #5
+293:               }
+00048A  FA8000     ULNK
+00048C  BE024F     MOV.D [--W15], W4
+00048E  78004F     MOV [--W15], W0
+000490  064000     RETFIE
+294:               
+295:               void __attribute__((__interrupt__, no_auto_psv)) _T3Interrupt()
+296:               {
+000492  781F80     MOV W0, [W15++]
+000494  BE9F84     MOV.D W4, [W15++]
+000496  FA0000     LNK #0x0
+297:                  if(dpskFlags.buckSSActive == ENABLED)
+000498  8086D4     MOV dpskFlags, W4
+00049A  620261     AND W4, #0x1, W4
+00049C  520FE0     SUB W4, #0x0, [W15]
+00049E  32000D     BRA Z, 0x4BA
+298:                  {
+299:                      if(buckControlReference < BUCKVOLTAGEREFERENCEADC)
+0004A0  808694     MOV buckControlReference, W4
+0004A2  780284     MOV W4, W5
+0004A4  20C164     MOV #0xC16, W4
+0004A6  528F84     SUB W5, W4, [W15]
+0004A8  3E0004     BRA GTU, 0x4B2
+300:                      {
+301:                           buckControlReference += BUCKINCREMENT;
+0004AA  808694     MOV buckControlReference, W4
+0004AC  420268     ADD W4, #0x8, W4
+0004AE  888694     MOV W4, buckControlReference
+0004B0  370004     BRA 0x4BA
+302:               
+303:                      }
+304:                      else
+305:                      {
+306:                           buckControlReference = BUCKVOLTAGEREFERENCEADC;
+0004B2  20C174     MOV #0xC17, W4
+0004B4  888694     MOV W4, buckControlReference
+307:                           dpskFlags.buckSSActive = DISABLED;
+0004B6  A910DA     BCLR dpskFlags, #0
+308:                           IEC0bits.T3IE = 0;
+0004B8  A90821     BCLR 0x821, #0
+309:                      }
+310:                   }
+311:                   IFS0bits.T3IF = 0;
+0004BA  A90801     BCLR 0x801, #0
+312:               }
+0004BC  FA8000     ULNK
+0004BE  BE024F     MOV.D [--W15], W4
+0004C0  78004F     MOV [--W15], W0
+0004C2  064000     RETFIE
+313:               
+314:               void __attribute__((__interrupt__, no_auto_psv)) _ADCAN0Interrupt()
+315:               {
+0004C4  781F80     MOV W0, [W15++]
+0004C6  BE9F84     MOV.D W4, [W15++]
+0004C8  781F86     MOV W6, [W15++]
+0004CA  FA0002     LNK #0x2
+316:                   int temp;
+317:               
+318:                   temp = ADCBUF0;
+0004CC  802064     MOV ADCBUF0, W4
+0004CE  780F04     MOV W4, [W14]
+319:               
+320:                   (Nop());
+0004D0  000000     NOP
+321:                   (Nop());
+0004D2  000000     NOP
+322:               
+323:                   IO_DRV = ~IO_DRV;
+0004D4  8070A4     MOV LATB, W4
+0004D6  DE224B     LSR W4, #11, W4
+0004D8  624261     AND.B W4, #0x1, W4
+0004DA  EAC204     COM.B W4, W4
+0004DC  624261     AND.B W4, #0x1, W4
+0004DE  FB8204     ZE W4, W4
+0004E0  620261     AND W4, #0x1, W4
+0004E2  DD224B     SL W4, #11, W4
+0004E4  8070A6     MOV LATB, W6
+0004E6  2F7FF5     MOV #0xF7FF, W5
+0004E8  630285     AND W6, W5, W5
+0004EA  720205     IOR W4, W5, W4
+0004EC  8870A4     MOV W4, LATB
+324:               
+325:                   IFS6bits.ADCAN0IF = 0;
+0004EE  A9C80D     BCLR 0x80D, #6
+326:               }
+0004F0  FA8000     ULNK
+0004F2  78034F     MOV [--W15], W6
+0004F4  BE024F     MOV.D [--W15], W4
+0004F6  78004F     MOV [--W15], W0
+0004F8  064000     RETFIE
+327:               
+328:               void __attribute__((__interrupt__, no_auto_psv, naked)) _ADCAN1Interrupt()
+329:               {
+330:                   (Nop());
+0004FA  000000     NOP
+331:                   (Nop());
+0004FC  000000     NOP
+332:                   IFS6bits.ADCAN1IF = 0;
+0004FE  A9E80D     BCLR 0x80D, #7
+333:               }
+000500  064000     RETFIE
+334:               
+335:               
+336:               #if(BUCK == ENABLED)
+337:               
+338:               #if(USE_ALT_WREG == DISABLED)
+339:               //void __attribute__((__interrupt__, no_auto_psv, naked)) _ADCAN1Interrupt()
+340:               //{
+341:               //    asm("mov.d w0, [w15++]");
+342:               //    asm("mov.d w2, [w15++]");
+343:               //
+344:               //    #if(OPENLOOP == DISABLED)
+345:               //    // Call 3P3Z Compensator
+346:               //    SMPS_Controller3P3ZUpdate(&buckVoltage3P3Z, &ADCBUF1, buckControlReference, &PDC1);
+347:               //    #endif
+348:               //
+349:               //    asm("mov ADCBUF0, w0");
+350:               //    asm("mov w0, _buckCurrent");
+351:               //    asm("mov ADCBUF1, w0");
+352:               //    asm("mov w0, _buckVoltage");
+353:               //
+354:               //    IFS6bits.ADCAN1IF = 0;
+355:               //
+356:               //    asm("mov.d [--w15], w2");
+357:               //    asm("mov.d [--w15], w0");
+358:               //}
+359:               
+360:               #else
+361:               void __attribute__((__interrupt__, no_auto_psv, naked)) _ADCAN1Interrupt()
+362:               {
+363:                   asm("CTXTSWP #0x1");        // Only needed for Early Samples
+364:               
+365:                   #if(OPENLOOP == DISABLED)
+366:                   // Call 3P3Z Compensator
+367:                   SMPS_Controller3P3Z(buckControlReference);
+368:                   #endif
+369:               
+370:                   asm("mov ADCBUF0, w0");
+371:                   asm("mov w0, _buckCurrent");
+372:                   asm("mov ADCBUF1, w0");
+373:                   asm("mov w0, _buckVoltage");
+374:               
+375:                   asm("CTXTSWP #0x0");
+376:                   IFS6bits.ADCAN1IF = 0;
+377:               }
+378:               #endif
+379:               
+380:               #endif
+381:               
+382:               #if(BOOST == ENABLED)
+383:               
+384:               #if(USE_ALT_WREG == DISABLED)
+385:               void __attribute__((__interrupt__, no_auto_psv, naked)) _ADCAN3Interrupt()
+386:               {
+387:                   asm("push.s");
+388:               
+389:                   #if(OPENLOOP == DISABLED)
+390:                   // Call 3P3Z Compensator
+391:                   SMPS_Controller3P3ZUpdate(&boostVoltage3P3Z, &ADCBUF3, boostControlReference, &PDC2);
+392:                   #endif
+393:               
+394:                   asm("mov ADCBUF2, w0");
+395:                   asm("mov w0, _boostCurrent");
+396:                   asm("mov ADCBUF3, w0");
+397:                   asm("mov w0, _boostVoltage");
+398:               
+399:                   IFS7bits.ADCAN3IF = 0;
+400:                   asm("pop.s");
+401:               }
+402:               
+403:               #else
+404:               void __attribute__((__interrupt__, no_auto_psv, naked)) _ADCAN3Interrupt()
+405:               {
+406:                   asm("CTXTSWP #0x2");        // Only needed for Early Samples
+407:               
+408:                   #if(OPENLOOP == DISABLED)
+409:                   // Call 3P3Z Compensator
+410:                   SMPS_Controller3P3Z(boostControlReference);
+411:                   #endif
+412:               
+413:                   asm("mov ADCBUF2, w0");
+414:                   asm("mov w0, _boostCurrent");
+415:                   asm("mov ADCBUF3, w0");
+416:                   asm("mov w0, _boostVoltage");
+417:               
+418:                   asm("CTXTSWP #0x0");
+419:                   IFS7bits.ADCAN3IF = 0;
+420:               }
+421:               #endif
+422:               
+423:               #endif
+---  C:/Users/c13248/Documents/SMPS Projects/_Digital Power Starter Kit/Update DPSK Design/Software/src TLAL/src/src/init.c
+1:                 ////////////////////////////////////////////////////////////////////////////////
+2:                 // © 2014 Microchip Technology Inc.
+3:                 //
+4:                 // MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any
+5:                 // derivatives created by any person or entity by or on your behalf, exclusively
+6:                 // with Microchip?s products.  Microchip and its licensors retain all ownership
+7:                 // and intellectual property rights in the accompanying software and in all
+8:                 // derivatives here to.
+9:                 //
+10:                // This software and any accompanying information is for suggestion only.  It
+11:                // does not modify Microchip?s standard warranty for its products.  You agree
+12:                // that you are solely responsible for testing the software and determining its
+13:                // suitability.  Microchip has no obligation to modify, test, certify, or
+14:                // support the software.
+15:                //
+16:                // THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER
+17:                // EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED
+18:                // WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR
+19:                // PURPOSE APPLY TO THIS SOFTWARE, ITS INTERACTION WITH MICROCHIP?S PRODUCTS,
+20:                // COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION.
+21:                //
+22:                // IN NO EVENT, WILL MICROCHIP BE LIABLE, WHETHER IN CONTRACT, WARRANTY, TORT
+23:                // (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), STRICT LIABILITY,
+24:                // INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+25:                // EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF
+26:                // ANY KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWSOEVER CAUSED, EVEN IF
+27:                // MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.
+28:                // TO THE FULLEST EXTENT ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL
+29:                // CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF
+30:                // FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+31:                //
+32:                // MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
+33:                // TERMS.
+34:                ////////////////////////////////////////////////////////////////////////////////
+35:                
+36:                #include "init.h"
+37:                
+38:                #if((OPENLOOP == DISABLED) && (BUCK == ENABLED))
+39:                
+40:                SMPS_3P3Z_T buckVoltage3P3Z;
+41:                
+42:                int16_t buckACoefficients[3]__attribute__ ((section (".xbss")));
+43:                int16_t buckBCoefficients[4]__attribute__ ((section (".xbss")));
+44:                
+45:                int16_t buckErrorHistory[4] __attribute__ ((space (ymemory), far));
+46:                int16_t buckControlHistory[3] __attribute__ ((space (ymemory), far));
+47:                
+48:                #endif
+49:                
+50:                #if((OPENLOOP == DISABLED) && (BOOST == ENABLED))
+51:                
+52:                SMPS_3P3Z_T boostVoltage3P3Z;
+53:                
+54:                int16_t boostACoefficients[3]__attribute__ ((section (".xbss")));
+55:                int16_t boostBCoefficients[4]__attribute__ ((section (".xbss")));
+56:                
+57:                int16_t boostErrorHistory[4] __attribute__ ((space (ymemory), far));
+58:                int16_t boostControlHistory[3] __attribute__ ((space (ymemory), far));
+59:                
+60:                #endif
+61:                
+62:                extern uint8_t messageComplete;
+63:                
+64:                uint8_t I2CLoadWrite = 0, I2CRegAddr = 0;
+65:                
+66:                void initClock(void)
+67:                {
+000BB4  FA0000     LNK #0x0
+68:                   // Configure Oscillator to operate the device at 70Mhz
+69:                   // Fosc = Fin*M/(N1*N2), Fcy = Fosc/2
+70:                   // Fosc = 7.37*(76)/(2*2)= 140Mhz for Fosc, Fcy = 70Mhz
+71:                
+72:                   // Configure PLL prescaler, PLL postscaler, PLL divisor
+73:                   PLLFBD             = 74;   // M = PLLFBD + 2
+000BB6  2004A4     MOV #0x4A, W4
+000BB8  883A34     MOV W4, PLLFBD
+74:                   CLKDIVbits.PLLPOST =  0;   // N1 = 2
+000BBA  803A24     MOV CLKDIV, W4
+000BBC  A16004     BCLR W4, #6
+000BBE  A17004     BCLR W4, #7
+000BC0  883A24     MOV W4, CLKDIV
+75:                   CLKDIVbits.PLLPRE  =  0;   // N2 = 2
+000BC2  803A25     MOV CLKDIV, W5
+000BC4  2FFE04     MOV #0xFFE0, W4
+000BC6  628204     AND W5, W4, W4
+000BC8  883A24     MOV W4, CLKDIV
+76:                
+77:                   (__builtin_write_OSCCONH(0x01));     // New Oscillator selection FRC w/ PLL
+000BCA  200016     MOV #0x1, W6
+000BCC  200784     MOV #0x78, W4
+000BCE  2009A5     MOV #0x9A, W5
+000BD0  207437     MOV #0x743, W7
+000BD2  784B84     MOV.B W4, [W7]
+000BD4  784B85     MOV.B W5, [W7]
+000BD6  784B86     MOV.B W6, [W7]
+78:                   (__builtin_write_OSCCONL(0x01));     // Enable Switch
+000BD8  200016     MOV #0x1, W6
+000BDA  200464     MOV #0x46, W4
+000BDC  200575     MOV #0x57, W5
+000BDE  207427     MOV #0x742, W7
+000BE0  784B84     MOV.B W4, [W7]
+000BE2  784B85     MOV.B W5, [W7]
+000BE4  784B86     MOV.B W6, [W7]
+79:                
+80:                   while(OSCCONbits.COSC != 0b001);    // Wait for Osc. to switch to FRC w/ PLL
+000BE6  000000     NOP
+000BE8  803A15     MOV OSCCON, W5
+000BEA  270004     MOV #0x7000, W4
+000BEC  628284     AND W5, W4, W5
+000BEE  210004     MOV #0x1000, W4
+000BF0  528F84     SUB W5, W4, [W15]
+000BF2  3AFFFA     BRA NZ, 0xBE8
+81:                   while(OSCCONbits.LOCK != 1);        // Wait for Pll to Lock
+000BF4  000000     NOP
+000BF6  803A15     MOV OSCCON, W5
+000BF8  200204     MOV #0x20, W4
+000BFA  628204     AND W5, W4, W4
+000BFC  520FE0     SUB W4, #0x0, [W15]
+000BFE  32FFFB     BRA Z, 0xBF6
+82:                
+83:                   // Setup the ADC and PWM clock for 120MHz
+84:                   // ((FRC * 16) / APSTSCLR ) = (7.37MHz * 16) / 1 = 117.9MHz
+85:                
+86:                   ACLKCONbits.FRCSEL   = 1;	  // FRC provides input for Auxiliary PLL (x16)
+000C00  A8C750     BSET ACLKCON, #6
+87:                   ACLKCONbits.SELACLK  = 1;	  // Aux Osc. provides clock source for PWM & ADC
+000C02  A8A751     BSET 0x751, #5
+88:                   ACLKCONbits.APSTSCLR = 7;	  // Divide Auxiliary clock by 1
+000C04  803A84     MOV ACLKCON, W4
+000C06  A08004     BSET W4, #8
+000C08  A09004     BSET W4, #9
+000C0A  A0A004     BSET W4, #10
+000C0C  883A84     MOV W4, ACLKCON
+89:                   ACLKCONbits.ENAPLL   = 1;	  // Enable Auxiliary PLL
+000C0E  A8E751     BSET 0x751, #7
+90:                
+91:                   while(ACLKCONbits.APLLCK != 1);  // Wait for Auxiliary PLL to Lock
+000C10  000000     NOP
+000C12  803A85     MOV ACLKCON, W5
+000C14  240004     MOV #0x4000, W4
+000C16  628204     AND W5, W4, W4
+000C18  520FE0     SUB W4, #0x0, [W15]
+000C1A  32FFFB     BRA Z, 0xC12
+92:                }
+000C1C  FA8000     ULNK
+000C1E  060000     RETURN
+93:                
+94:                
+95:                void initI2C(void)
+96:                {
+000C20  FA0000     LNK #0x0
+97:                    //Configure I2C as MASTER to communicate with Load IC
+98:                    I2C1CON1bits.A10M = 0;        // 7-bit slave address/data
+000C22  A94201     BCLR 0x201, #2
+99:                    I2C1CON1bits.DISSLW = 1;      // Slew rate control disabled
+000C24  A82201     BSET 0x201, #1
+100:               
+101:                   I2C1BRG = I2CBAUDRATE;       // 100kHz
+000C26  202B24     MOV #0x2B2, W4
+000C28  881054     MOV W4, I2C1BRG
+102:               
+103:                   IFS1bits.MI2C1IF = 0;
+000C2A  A92802     BCLR IFS1, #1
+104:                   IEC1bits.MI2C1IE = 1;        // Enable Master I2C interrupt
+000C2C  A82822     BSET IEC1, #1
+105:               
+106:                   IPC4bits.MI2C1IP = 5;
+000C2E  804244     MOV IPC4, W4
+000C30  A04004     BSET W4, #4
+000C32  A15004     BCLR W4, #5
+000C34  A06004     BSET W4, #6
+000C36  884244     MOV W4, IPC4
+107:               
+108:                   I2C1CON1bits.I2CEN = 1;       // Enable I2C Module
+000C38  A8E201     BSET 0x201, #7
+109:               
+110:                   // Code Configures MCP23008 and sets up the initial load
+111:                   I2CRegAddr = IOCON_REGADDR;
+000C3A  B3C054     MOV.B #0x5, W4
+000C3C  FD0200     EXCH W0, W4
+000C3E  B7F0F1     MOV.B WREG, I2CRegAddr
+000C40  FD0200     EXCH W0, W4
+112:                   I2CLoadWrite = 0x20;          // Disabled sequential operation
+000C42  B3C204     MOV.B #0x20, W4
+000C44  FD0200     EXCH W0, W4
+000C46  B7F0F0     MOV.B WREG, I2CLoadWrite
+000C48  FD0200     EXCH W0, W4
+113:                   
+114:                   I2C1CON1bits.SEN = 1;          // Initiate start sequence
+000C4A  A80200     BSET I2C1CONL, #0
+115:               
+116:                   while(messageComplete == 0);
+000C4C  000000     NOP
+000C4E  210D64     MOV #0x10D6, W4
+000C50  784214     MOV.B [W4], W4
+000C52  524FE0     SUB.B W4, #0x0, [W15]
+000C54  32FFFC     BRA Z, 0xC4E
+117:                   messageComplete = 0;
+000C56  EB4200     CLR.B W4
+000C58  FD0200     EXCH W0, W4
+000C5A  B7F0D6     MOV.B WREG, messageComplete
+000C5C  FD0200     EXCH W0, W4
+118:               
+119:                   I2CRegAddr = IODIR_REGADDR;
+000C5E  EB4200     CLR.B W4
+000C60  FD0200     EXCH W0, W4
+000C62  B7F0F1     MOV.B WREG, I2CRegAddr
+000C64  FD0200     EXCH W0, W4
+120:                   I2CLoadWrite = 0x00;          // Configures all I/O pins as output
+000C66  EB4200     CLR.B W4
+000C68  FD0200     EXCH W0, W4
+000C6A  B7F0F0     MOV.B WREG, I2CLoadWrite
+000C6C  FD0200     EXCH W0, W4
+121:               
+122:                   I2C1CON1bits.SEN = 1;          // Initiate start sequence
+000C6E  A80200     BSET I2C1CONL, #0
+123:               
+124:                   while(messageComplete == 0);
+000C70  000000     NOP
+000C72  210D64     MOV #0x10D6, W4
+000C74  784214     MOV.B [W4], W4
+000C76  524FE0     SUB.B W4, #0x0, [W15]
+000C78  32FFFC     BRA Z, 0xC72
+125:                   messageComplete = 0;
+000C7A  EB4200     CLR.B W4
+000C7C  FD0200     EXCH W0, W4
+000C7E  B7F0D6     MOV.B WREG, messageComplete
+000C80  FD0200     EXCH W0, W4
+126:               
+127:                   I2CRegAddr = GPIO_REGADDR;
+000C82  B3C094     MOV.B #0x9, W4
+000C84  FD0200     EXCH W0, W4
+000C86  B7F0F1     MOV.B WREG, I2CRegAddr
+000C88  FD0200     EXCH W0, W4
+128:                   I2CLoadWrite = (I2CBUCKLOAD1WRITE | I2CBOOSTLOAD1WRITE);
+000C8A  B3C034     MOV.B #0x3, W4
+000C8C  FD0200     EXCH W0, W4
+000C8E  B7F0F0     MOV.B WREG, I2CLoadWrite
+000C90  FD0200     EXCH W0, W4
+129:               
+130:                   I2C1CON1bits.SEN = 1;          // Initiate start sequence
+000C92  A80200     BSET I2C1CONL, #0
+131:               
+132:                   while(messageComplete == 0);
+000C94  000000     NOP
+000C96  210D64     MOV #0x10D6, W4
+000C98  784214     MOV.B [W4], W4
+000C9A  524FE0     SUB.B W4, #0x0, [W15]
+000C9C  32FFFC     BRA Z, 0xC96
+133:                   messageComplete = 0;
+000C9E  EB4200     CLR.B W4
+000CA0  780004     MOV W4, W0
+000CA2  B7F0D6     MOV.B WREG, messageComplete
+134:               
+135:               }
+000CA4  FA8000     ULNK
+000CA6  060000     RETURN
+136:               
+137:               void initTimer(void)
+138:               {
+000CA8  FA0000     LNK #0x0
+139:                   //Load Dynamics applied after the softstart
+140:               
+141:                   #if((BUCKDYNAMICLOAD == ENABLED) || (BOOSTDYNAMICLOAD == ENABLED))
+142:                   PR1 = TMRPERIOD;
+143:                   T1CONbits.TCKPS = TMRSCALER;
+144:                   T1CONbits.TCS = 0;                  // Clock source is internal Fcy
+145:               
+146:                   IFS0bits.T1IF = 0;
+147:                   IPC0bits.T1IP = 4;
+148:                   IEC0bits.T1IE = 1;
+149:                   T1CONbits.TON = 1;
+150:                   #endif
+151:               
+152:               }
+000CAA  FA8000     ULNK
+000CAC  060000     RETURN
+153:               
+154:               void buckDrive(void)
+155:               {
+000CAE  FA0000     LNK #0x0
+156:                   IOCON1bits.PENH = 0;                // GPIO controls I/O port
+000CB0  A9EC23     BCLR 0xC23, #7
+157:                   IOCON1bits.PENL = 0;           
+000CB2  A9CC23     BCLR 0xC23, #6
+158:               
+159:                   IOCON1bits.PMOD = 0;                // Complementary Mode
+000CB4  806114     MOV IOCON1, W4
+000CB6  A1A004     BCLR W4, #10
+000CB8  A1B004     BCLR W4, #11
+000CBA  886114     MOV W4, IOCON1
+160:                   
+161:                   IOCON1bits.POLH = 0;                // Drive signals are active-high
+000CBC  A9AC23     BCLR 0xC23, #5
+162:                   IOCON1bits.POLL = 0;                // Drive signals are active-high
+000CBE  A98C23     BCLR 0xC23, #4
+163:               
+164:                   IOCON1bits.OVRENH = 0;              // Override disabled
+000CC0  A92C23     BCLR 0xC23, #1
+165:                   IOCON1bits.OVRENL = 0;	  
+000CC2  A90C23     BCLR 0xC23, #0
+166:                   IOCON1bits.OVRDAT = 0b00;           // Override data PWMH and PWML
+000CC4  806114     MOV IOCON1, W4
+000CC6  A16004     BCLR W4, #6
+000CC8  A17004     BCLR W4, #7
+000CCA  886114     MOV W4, IOCON1
+167:                   IOCON1bits.FLTDAT = 0b00;           // Fault data PWMH and PWML
+000CCC  806114     MOV IOCON1, W4
+000CCE  A14004     BCLR W4, #4
+000CD0  A15004     BCLR W4, #5
+000CD2  886114     MOV W4, IOCON1
+168:               
+169:                   PWMCON1bits.DTC   = 0;              // Positive Deadtime enabled
+000CD4  806104     MOV PWMCON1, W4
+000CD6  A16004     BCLR W4, #6
+000CD8  A17004     BCLR W4, #7
+000CDA  886104     MOV W4, PWMCON1
+170:                   DTR1    = 80;
+000CDC  200504     MOV #0x50, W4
+000CDE  886154     MOV W4, DTR1
+171:                   ALTDTR1 = 110;
+000CE0  2006E4     MOV #0x6E, W4
+000CE2  886164     MOV W4, ALTDTR1
+172:               				  
+173:                   PWMCON1bits.IUE = 0;                // Disable Immediate duty cycle updates
+000CE4  A90C20     BCLR PWMCON1, #0
+174:                   PWMCON1bits.ITB = 0;                // Select Primary Timebase mode
+000CE6  A92C21     BCLR 0xC21, #1
+175:               
+176:                   FCLCON1bits.FLTSRC = 0b01101;       // Fault Control Signal assigned to CMP1
+000CE8  806125     MOV FCLCON1, W5
+000CEA  2FF074     MOV #0xFF07, W4
+000CEC  628284     AND W5, W4, W5
+000CEE  200684     MOV #0x68, W4
+000CF0  720205     IOR W4, W5, W4
+000CF2  886124     MOV W4, FCLCON1
+177:                   FCLCON1bits.FLTPOL = 0;             // Fault Signal is active-high
+000CF4  A94C24     BCLR FCLCON1, #2
+178:                   FCLCON1bits.FLTMOD = 1;             // Cycle-by-Cycle current limiting
+000CF6  806124     MOV FCLCON1, W4
+000CF8  A00004     BSET W4, #0
+000CFA  A11004     BCLR W4, #1
+000CFC  886124     MOV W4, FCLCON1
+179:               
+180:                   // In order to block the sensed current spike at the
+181:                   // turn on edge of the HS FET, use Leading Edge blanking.
+182:                   LEBCON1bits.PHR      = 1;           // Enable LEB bit for HS MOSFET rising edge
+000CFE  A8EC3B     BSET 0xC3B, #7
+183:                   LEBCON1bits.FLTLEBEN = 1;           // Fault Input LEB Enabled
+000D00  A86C3B     BSET 0xC3B, #3
+184:                   LEBDLY1bits.LEB      = 20;          // 8.32n Steps x 20 = 160ns
+000D02  8061E5     MOV LEBDLY1, W5
+000D04  2F0074     MOV #0xF007, W4
+000D06  628284     AND W5, W4, W5
+000D08  200A04     MOV #0xA0, W4
+000D0A  720205     IOR W4, W5, W4
+000D0C  8861E4     MOV W4, LEBDLY1
+185:               
+186:                   TRGCON1bits.TRGDIV = 2;             // Trigger interrupt generated once every 3 PWM cycle
+000D0E  8061A4     MOV TRGCON1, W4
+000D10  A1C004     BCLR W4, #12
+000D12  A0D004     BSET W4, #13
+000D14  A1E004     BCLR W4, #14
+000D16  A1F004     BCLR W4, #15
+000D18  8861A4     MOV W4, TRGCON1
+187:                   TRGCON1bits.TRGSTRT = 0;            // Trigger generated after waiting 0 PWM cycles
+000D1A  8061A5     MOV TRGCON1, W5
+000D1C  2FFC04     MOV #0xFFC0, W4
+000D1E  628204     AND W5, W4, W4
+000D20  8861A4     MOV W4, TRGCON1
+188:                   
+189:                   PDC1 = 0;                           // Initial pulse-width
+000D22  EB0200     CLR W4
+000D24  886134     MOV W4, PDC1
+190:                   TRIG1 = 250;                        // Set Initial Trigger location
+000D26  200FA4     MOV #0xFA, W4
+000D28  886194     MOV W4, TRIG1
+191:               
+192:               }
+000D2A  FA8000     ULNK
+000D2C  060000     RETURN
+193:               
+194:               void boostDrive(void)
+195:               {
+000D2E  FA0000     LNK #0x0
+196:                   IOCON2bits.PENH = 0;                // PWM2H is controlled by I/O module
+000D30  A9EC43     BCLR 0xC43, #7
+197:                   IOCON2bits.PENL = 1;                // PWM2L is controlled by PWM module
+000D32  A8CC43     BSET 0xC43, #6
+198:               
+199:                   IOCON2bits.PMOD = 1;                // Redundant Mode w/ PWMH not used
+000D34  806214     MOV IOCON2, W4
+000D36  A0A004     BSET W4, #10
+000D38  A1B004     BCLR W4, #11
+000D3A  886214     MOV W4, IOCON2
+200:                   IOCON2bits.POLL = 0;                // Drive signal- active-high
+000D3C  A98C43     BCLR 0xC43, #4
+201:               
+202:                   IOCON2bits.OVRENL = 0;		// Override disabled
+000D3E  A90C43     BCLR 0xC43, #0
+203:                   IOCON2bits.OVRDAT = 0b00;           // Override data is 0
+000D40  806214     MOV IOCON2, W4
+000D42  A16004     BCLR W4, #6
+000D44  A17004     BCLR W4, #7
+000D46  886214     MOV W4, IOCON2
+204:               
+205:                   PWMCON2bits.DTC = 2;                // Deadtime disabled
+000D48  806204     MOV PWMCON2, W4
+000D4A  A16004     BCLR W4, #6
+000D4C  A07004     BSET W4, #7
+000D4E  886204     MOV W4, PWMCON2
+206:               
+207:                   PWMCON2bits.IUE = 0;                // Disable Immediate duty cycle updates
+000D50  A90C40     BCLR PWMCON2, #0
+208:                   PWMCON2bits.ITB = 0;                // Select Primary Timebase mode
+000D52  A92C41     BCLR 0xC41, #1
+209:                   
+210:                   FCLCON2bits.FLTSRC = 0b01110;       // Fault Control Signal assigned to Fault 3
+000D54  806225     MOV FCLCON2, W5
+000D56  2FF074     MOV #0xFF07, W4
+000D58  628284     AND W5, W4, W5
+000D5A  200704     MOV #0x70, W4
+000D5C  720205     IOR W4, W5, W4
+000D5E  886224     MOV W4, FCLCON2
+211:                   FCLCON2bits.FLTPOL = 0;             // Fault Signal is active-high
+000D60  A94C44     BCLR FCLCON2, #2
+212:                   FCLCON2bits.FLTMOD = 3;             // Cycle-by-Cycle Fault Mode
+000D62  806224     MOV FCLCON2, W4
+000D64  A00004     BSET W4, #0
+000D66  A01004     BSET W4, #1
+000D68  886224     MOV W4, FCLCON2
+213:               
+214:                   //Enable LEB to blank (mask) any turn-on spike
+215:                   LEBCON2bits.PLR      =  1;          // Enable LEB bit for PWML
+000D6A  A8AC5B     BSET 0xC5B, #5
+216:                   LEBCON2bits.FLTLEBEN =  1;          // Fault Input LEB Enabled
+000D6C  A86C5B     BSET 0xC5B, #3
+217:                   LEBDLY2bits.LEB      = 20;          // 8.32n Steps x 20 = 160ns
+000D6E  8062E5     MOV LEBDLY2, W5
+000D70  2F0074     MOV #0xF007, W4
+000D72  628284     AND W5, W4, W5
+000D74  200A04     MOV #0xA0, W4
+000D76  720205     IOR W4, W5, W4
+000D78  8862E4     MOV W4, LEBDLY2
+218:               
+219:                   TRGCON2bits.TRGDIV  = 2;            // Trigger interrupt generated once every 3 PWM cycle
+000D7A  8062A4     MOV TRGCON2, W4
+000D7C  A1C004     BCLR W4, #12
+000D7E  A0D004     BSET W4, #13
+000D80  A1E004     BCLR W4, #14
+000D82  A1F004     BCLR W4, #15
+000D84  8862A4     MOV W4, TRGCON2
+220:                   TRGCON2bits.TRGSTRT = 1;            // Trigger generated after waiting 1 PWM cycles
+000D86  8062A5     MOV TRGCON2, W5
+000D88  2FFC04     MOV #0xFFC0, W4
+000D8A  628204     AND W5, W4, W4
+000D8C  A00004     BSET W4, #0
+000D8E  8862A4     MOV W4, TRGCON2
+221:               
+222:                   PHASE2 = PTPER>>1;			// Introduce phase shift from Buck converter to reduce Vin distortion
+000D90  806024     MOV PTPER, W4
+000D92  D10204     LSR W4, W4
+000D94  886244     MOV W4, PHASE2
+223:                                                       // 180Deg phase-shift from Buck converter
+224:                   PDC2  = 0;                          // Initial Duty Cycle
+000D96  EB0200     CLR W4
+000D98  886234     MOV W4, PDC2
+225:                   TRIG2 = 250;                        // Trigger generated at beginning of PWM period
+000D9A  200FA4     MOV #0xFA, W4
+000D9C  886294     MOV W4, TRIG2
+226:               }
+000D9E  FA8000     ULNK
+000DA0  060000     RETURN
+227:               
+228:               void initCMP(void)
+229:               {
+000DA2  FA0000     LNK #0x0
+230:                   #if(BUCK == ENABLED)
+231:                   CMP1CONbits.INSEL  = 0;          // Comparator 1A
+000DA4  802A04     MOV CMP1CON, W4
+000DA6  A16004     BCLR W4, #6
+000DA8  A17004     BCLR W4, #7
+000DAA  882A04     MOV W4, CMP1CON
+232:                   CMP1CONbits.HYSSEL = 1;          // 15mV of Hysteresis
+000DAC  802A04     MOV CMP1CON, W4
+000DAE  A0B004     BSET W4, #11
+000DB0  A1C004     BCLR W4, #12
+000DB2  882A04     MOV W4, CMP1CON
+233:               
+234:                   CMP1DAC = BUCKMAXCURRENTDAC;     // DAC voltage for overcurrent
+000DB4  20B934     MOV #0xB93, W4
+000DB6  882A14     MOV W4, CMP1DAC
+235:               
+236:                   CMP1CONbits.CMPON = 1;
+000DB8  A8E541     BSET 0x541, #7
+237:                   #endif
+238:               
+239:                   #if(BOOST == ENABLED)
+240:                   CMP2CONbits.INSEL  = 0;          // Comparator 2A input
+241:                   CMP2CONbits.HYSSEL = 1;          // 15mV of Hysteresis
+242:               
+243:                   CMP2DAC = BOOSTMAXCURRENTDAC;
+244:               
+245:                   CMP2CONbits.CMPON = 1;
+246:                   
+247:                   #endif
+248:               }
+000DBA  FA8000     ULNK
+000DBC  060000     RETURN
+249:               
+250:               void initADC(void)
+251:               {
+000DBE  FA0000     LNK #0x0
+252:                   // Setup ADC Clock Input Max speed of 70MHz
+253:                   ADCON3Hbits.CLKSEL = 1;         // Fosc (140MHz)
+000DC0  801854     MOV ADCON3H, W4
+000DC2  A0E004     BSET W4, #14
+000DC4  A1F004     BCLR W4, #15
+000DC6  881854     MOV W4, ADCON3H
+254:                   ADCON3Hbits.CLKDIV = 0;         // Global Clock divider (1:1)
+000DC8  801855     MOV ADCON3H, W5
+000DCA  2C0FF4     MOV #0xC0FF, W4
+000DCC  628204     AND W5, W4, W4
+000DCE  881854     MOV W4, ADCON3H
+255:                   ADCORE0Hbits.ADCS = 0;          // Core clock divider (1:2)
+000DD0  801EB5     MOV ADCORE0H, W5
+000DD2  2FF804     MOV #0xFF80, W4
+000DD4  628204     AND W5, W4, W4
+000DD6  881EB4     MOV W4, ADCORE0H
+256:                   ADCORE1Hbits.ADCS = 0;
+000DD8  801ED5     MOV ADCORE1H, W5
+000DDA  2FF804     MOV #0xFF80, W4
+000DDC  628204     AND W5, W4, W4
+000DDE  881ED4     MOV W4, ADCORE1H
+257:                   ADCON2Lbits.SHRADCS = 0;        // 1/2 clock divider
+000DE0  801825     MOV ADCON2L, W5
+000DE2  2FF804     MOV #0xFF80, W4
+000DE4  628204     AND W5, W4, W4
+000DE6  881824     MOV W4, ADCON2L
+258:               
+259:               
+260:                   ADCON1Hbits.FORM = 0;           // Integer format
+000DE8  A9E302     BCLR ADCON1H, #7
+261:                   ADCON3Lbits.REFSEL = 0;         // AVdd as voltage reference
+000DEA  801844     MOV ADCON3L, W4
+000DEC  A1D004     BCLR W4, #13
+000DEE  A1E004     BCLR W4, #14
+000DF0  A1F004     BCLR W4, #15
+000DF2  881844     MOV W4, ADCON3L
+262:                   ADCON1Hbits.SHRRES = 3;         // ADC Cores in 12-bit resolution mode
+000DF4  801814     MOV ADCON1H, W4
+000DF6  A05004     BSET W4, #5
+000DF8  A06004     BSET W4, #6
+000DFA  881814     MOV W4, ADCON1H
+263:                   ADCORE0Hbits.RES = 3;
+000DFC  801EB4     MOV ADCORE0H, W4
+000DFE  A08004     BSET W4, #8
+000E00  A09004     BSET W4, #9
+000E02  881EB4     MOV W4, ADCORE0H
+264:                   ADCORE1Hbits.RES = 3;
+000E04  801ED4     MOV ADCORE1H, W4
+000E06  A08004     BSET W4, #8
+000E08  A09004     BSET W4, #9
+000E0A  881ED4     MOV W4, ADCORE1H
+265:                   ADCON2Hbits.SHRSAMC = 2;         // Shared ADC Core sample time 4Tad
+000E0C  801835     MOV ADCON2H, W5
+000E0E  2FC004     MOV #0xFC00, W4
+000E10  628204     AND W5, W4, W4
+000E12  A01004     BSET W4, #1
+000E14  881834     MOV W4, ADCON2H
+266:               
+267:                   // Configure ANx for unsigned format and single ended (0,0)
+268:                   ADMOD0L = 0x0000;
+000E16  EB0200     CLR W4
+000E18  881884     MOV W4, ADMOD0L
+269:               
+270:                   calibrateADC();
+000E1A  070029     RCALL calibrateADC
+271:               
+272:                   
+273:               #if(BUCK == ENABLED)
+274:                   ADTRIG0Lbits.TRGSRC0 = 5;       // ADC AN0/AN1 triggered by PWM1
+000E1C  801C05     MOV ADTRIG0L, W5
+000E1E  2FFE04     MOV #0xFFE0, W4
+000E20  628204     AND W5, W4, W4
+000E22  B30054     IOR #0x5, W4
+000E24  881C04     MOV W4, ADTRIG0L
+275:                   ADTRIG0Lbits.TRGSRC1 = 5;
+000E26  801C05     MOV ADTRIG0L, W5
+000E28  2E0FF4     MOV #0xE0FF, W4
+000E2A  628284     AND W5, W4, W5
+000E2C  205004     MOV #0x500, W4
+000E2E  720205     IOR W4, W5, W4
+000E30  881C04     MOV W4, ADTRIG0L
+276:               
+277:                   IFS6bits.ADCAN1IF  = 0;         // Clear ADC interrupt flag
+000E32  A9E80D     BCLR 0x80D, #7
+278:                   IPC27bits.ADCAN1IP = 6;	    // Set ADC interrupt priority
+000E34  8043B4     MOV IPC27, W4
+000E36  A1C004     BCLR W4, #12
+000E38  A0D004     BSET W4, #13
+000E3A  A0E004     BSET W4, #14
+000E3C  8843B4     MOV W4, IPC27
+279:               
+280:               #endif
+281:               
+282:               #if (BOOST == ENABLED)
+283:                   ADTRIG0Hbits.TRGSRC2 = 6;       // ADC AN2/AN3 triggered by PWM2
+284:                   ADTRIG0Hbits.TRGSRC3 = 6;
+285:               
+286:                   IFS7bits.ADCAN3IF  = 0;          // Clear ADC interrupt flag
+287:                   IPC28bits.ADCAN3IP = 6;          // Set ADC interrupt priority
+288:               #endif
+289:                   ADTRIG1Lbits.TRGSRC4 = 13;      // ADC AN4/AN7 triggered by timer2
+000E3E  801C25     MOV ADTRIG1L, W5
+000E40  2FFE04     MOV #0xFFE0, W4
+000E42  628204     AND W5, W4, W4
+000E44  B300D4     IOR #0xD, W4
+000E46  881C24     MOV W4, ADTRIG1L
+290:                   ADTRIG1Hbits.TRGSRC7 = 13;
+000E48  801C35     MOV ADTRIG1H, W5
+000E4A  2E0FF4     MOV #0xE0FF, W4
+000E4C  628284     AND W5, W4, W5
+000E4E  20D004     MOV #0xD00, W4
+000E50  720205     IOR W4, W5, W4
+000E52  881C34     MOV W4, ADTRIG1H
+291:               
+292:                   PR2 = 2100;                     // 30us
+000E54  208344     MOV #0x834, W4
+000E56  880864     MOV W4, PR2
+293:                   T2CONbits.TON = 1;              // Enabled Timer
+000E58  A8E111     BSET 0x111, #7
+294:               
+295:                   IFS7bits.ADCAN7IF = 0;           // Clear ADC interrupt flag
+000E5A  A9A80E     BCLR IFS7, #5
+296:                   IPC29bits.ADCAN7IP = 5;	    // Set ADC interrupt priority
+000E5C  8043D4     MOV IPC29, W4
+000E5E  A04004     BSET W4, #4
+000E60  A15004     BCLR W4, #5
+000E62  A06004     BSET W4, #6
+000E64  8843D4     MOV W4, IPC29
+297:                   IEC7bits.ADCAN7IE = 1;	    // Enable the ADC AN7 interrupt
+000E66  A8A82E     BSET IEC7, #5
+298:                   ADIELbits.IE7 = 1;
+000E68  A8E320     BSET ADIEL, #7
+299:               }
+000E6A  FA8000     ULNK
+000E6C  060000     RETURN
+300:               
+301:               void calibrateADC(void)
+302:               {
+000E6E  FA0000     LNK #0x0
+303:                   // Turn on ADC module
+304:                   ADCON1Lbits.ADON = 1;
+000E70  A8E301     BSET 0x301, #7
+305:               
+306:                   // Turn on analog power for dedicated core 0
+307:                   ADCON5Lbits.C0PWR = 1;
+000E72  A80400     BSET ADCON5L, #0
+308:                   while(ADCON5Lbits.C0RDY == 0);
+000E74  000000     NOP
+000E76  802005     MOV ADCON5L, W5
+000E78  201004     MOV #0x100, W4
+000E7A  628204     AND W5, W4, W4
+000E7C  520FE0     SUB W4, #0x0, [W15]
+000E7E  32FFFB     BRA Z, 0xE76
+309:                   ADCON3Hbits.C0EN = 1;
+000E80  A8030A     BSET ADCON3H, #0
+310:               
+311:                   // Turn on analog power for dedicated core 1
+312:                   ADCON5Lbits.C1PWR = 1;
+000E82  A82400     BSET ADCON5L, #1
+313:                   while(ADCON5Lbits.C1RDY == 0);
+000E84  000000     NOP
+000E86  802005     MOV ADCON5L, W5
+000E88  202004     MOV #0x200, W4
+000E8A  628204     AND W5, W4, W4
+000E8C  520FE0     SUB W4, #0x0, [W15]
+000E8E  32FFFB     BRA Z, 0xE86
+314:                   ADCON3Hbits.C1EN = 1;
+000E90  A8230A     BSET ADCON3H, #1
+315:               
+316:                   // Turn on analog power for shared core
+317:                   ADCON5Lbits.SHRPWR = 1;
+000E92  A8E400     BSET ADCON5L, #7
+318:                   while(ADCON5Lbits.SHRRDY == 0);
+000E94  000000     NOP
+000E96  802005     MOV ADCON5L, W5
+000E98  280004     MOV #0x8000, W4
+000E9A  628204     AND W5, W4, W4
+000E9C  520FE0     SUB W4, #0x0, [W15]
+000E9E  32FFFB     BRA Z, 0xE96
+319:                   ADCON3Hbits.SHREN = 1;
+000EA0  A8E30A     BSET ADCON3H, #7
+320:               
+321:                   // Enable calibration for the dedicated core 0
+322:                   ADCAL0Lbits.CAL0EN = 1;
+000EA2  A82404     BSET ADCAL0L, #1
+323:                   ADCAL0Lbits.CAL0DIFF = 0;           // Single-ended input calibration
+000EA4  A94404     BCLR ADCAL0L, #2
+324:                   ADCAL0Lbits.CAL0RUN = 1;            // Start Cal
+000EA6  A80404     BSET ADCAL0L, #0
+325:                   while(ADCAL0Lbits.CAL0RDY == 0);
+000EA8  000000     NOP
+000EAA  802025     MOV ADCAL0L, W5
+000EAC  200804     MOV #0x80, W4
+000EAE  628204     AND W5, W4, W4
+000EB0  520FE0     SUB W4, #0x0, [W15]
+000EB2  32FFFB     BRA Z, 0xEAA
+326:                   ADCAL0Lbits.CAL0EN = 0;             // Cal complete
+000EB4  A92404     BCLR ADCAL0L, #1
+327:               
+328:                   // Enable calibration for the dedicated core 1
+329:                   ADCAL0Lbits.CAL1EN = 1;
+000EB6  A82405     BSET 0x405, #1
+330:                   ADCAL0Lbits.CAL1DIFF = 0;           // Single-ended input calibration
+000EB8  A94405     BCLR 0x405, #2
+331:                   ADCAL0Lbits.CAL1RUN = 1;            // Start Cal
+000EBA  A80405     BSET 0x405, #0
+332:                   while(ADCAL0Lbits.CAL1RDY == 0);
+000EBC  000000     NOP
+000EBE  802025     MOV ADCAL0L, W5
+000EC0  280004     MOV #0x8000, W4
+000EC2  628204     AND W5, W4, W4
+000EC4  520FE0     SUB W4, #0x0, [W15]
+000EC6  32FFFB     BRA Z, 0xEBE
+333:                   ADCAL0Lbits.CAL1EN = 0;             // Cal complete
+000EC8  A92405     BCLR 0x405, #1
+334:               
+335:               
+336:                   ADCAL1Hbits.CSHRSKIP = 1;
+000ECA  A8640B     BSET 0x40B, #3
+337:               
+338:                   // Enable calibration for the shared core
+339:               //    ADCAL1Hbits.CSHREN = 1;
+340:               //    ADCAL1Hbits.CSHRDIFF = 0;           // Single-ended input calibration
+341:               //    ADCAL1Hbits.CSHRRUN = 1;            // Start Cal
+342:               //    while(ADCAL1Hbits.CSHRRDY == 0);
+343:               //    ADCAL1Hbits.CSHRDIFF = 1;           // Differential input calibration
+344:               //    ADCAL1Hbits.CSHRRUN = 1;
+345:               //    while(ADCAL1Hbits.CSHRRDY == 0);
+346:               //    ADCAL1Hbits.CSHREN = 0;             // Cal complete
+347:               }
+000ECC  FA8000     ULNK
+000ECE  060000     RETURN
+348:               
+349:               
+350:               #if((OPENLOOP == DISABLED) && (BUCK == ENABLED))
+351:               void initBuckComp(void)
+352:               {
+000ED0  FA0000     LNK #0x0
+353:                   #if (USE_ALT_WREG == DISABLED)
+354:                   buckVoltage3P3Z.aCoefficients = &buckACoefficients[0];
+000ED2  210504     MOV #0x1050, W4
+000ED4  8886F4     MOV W4, buckVoltage3P3Z
+355:                   buckVoltage3P3Z.bCoefficients = &buckBCoefficients[0];
+000ED6  210564     MOV #0x1056, W4
+000ED8  888704     MOV W4, 0x10E0
+356:               
+357:                   buckVoltage3P3Z.controlHistory = &buckControlHistory[0];
+000EDA  217FA4     MOV #0x17FA, W4
+000EDC  888714     MOV W4, 0x10E2
+358:                   buckVoltage3P3Z.errorHistory = &buckErrorHistory[0];
+000EDE  217F24     MOV #0x17F2, W4
+000EE0  888724     MOV W4, 0x10E4
+359:               
+360:                   SMPS_Controller3P3ZInitialize(&buckVoltage3P3Z);
+000EE2  210DE0     MOV #0x10DE, W0
+000EE4  07012B     RCALL _SMPS_Controller3P3ZInitialize
+361:               
+362:                   buckVoltage3P3Z.aCoefficients[0] = BUCKCOMP3P3ZCOEFFA1;
+000EE6  8086F4     MOV buckVoltage3P3Z, W4
+000EE8  20E9F5     MOV #0xE9F, W5
+000EEA  780A05     MOV W5, [W4]
+363:                   buckVoltage3P3Z.aCoefficients[1] = BUCKCOMP3P3ZCOEFFA2;
+000EEC  8086F4     MOV buckVoltage3P3Z, W4
+000EEE  E88204     INC2 W4, W4
+000EF0  20D525     MOV #0xD52, W5
+000EF2  780A05     MOV W5, [W4]
+364:                   buckVoltage3P3Z.aCoefficients[2] = BUCKCOMP3P3ZCOEFFA3;
+000EF4  8086F4     MOV buckVoltage3P3Z, W4
+000EF6  420264     ADD W4, #0x4, W4
+000EF8  2FBEE5     MOV #0xFBEE, W5
+000EFA  780A05     MOV W5, [W4]
+365:               
+366:                   buckVoltage3P3Z.bCoefficients[0] = BUCKCOMP3P3ZCOEFFB0;
+000EFC  808704     MOV 0x10E0, W4
+000EFE  27FFC5     MOV #0x7FFC, W5
+000F00  780A05     MOV W5, [W4]
+367:                   buckVoltage3P3Z.bCoefficients[1] = BUCKCOMP3P3ZCOEFFB1;
+000F02  808704     MOV 0x10E0, W4
+000F04  E88204     INC2 W4, W4
+000F06  298EE5     MOV #0x98EE, W5
+000F08  780A05     MOV W5, [W4]
+368:                   buckVoltage3P3Z.bCoefficients[2] = BUCKCOMP3P3ZCOEFFB2;
+000F0A  808704     MOV 0x10E0, W4
+000F0C  420264     ADD W4, #0x4, W4
+000F0E  281395     MOV #0x8139, W5
+000F10  780A05     MOV W5, [W4]
+369:                   buckVoltage3P3Z.bCoefficients[3] = BUCKCOMP3P3ZCOEFFB3;
+000F12  808704     MOV 0x10E0, W4
+000F14  420266     ADD W4, #0x6, W4
+000F16  268485     MOV #0x6848, W5
+000F18  780A05     MOV W5, [W4]
+370:               
+371:                   buckVoltage3P3Z.preShift = BUCKPRESHIFT;
+000F1A  EB0200     CLR W4
+000F1C  888734     MOV W4, 0x10E6
+372:                   buckVoltage3P3Z.postShift = BUCKPOSTSHIFT;
+000F1E  2FFFD4     MOV #0xFFFD, W4
+000F20  888744     MOV W4, 0x10E8
+373:                   buckVoltage3P3Z.postScaler = BUCKPOSTSCALER;
+000F22  255C64     MOV #0x55C6, W4
+000F24  888754     MOV W4, 0x10EA
+374:               
+375:                   buckVoltage3P3Z.maxOutput = BUCKMAXDUTYCYCLE;
+000F26  20A554     MOV #0xA55, W4
+000F28  888774     MOV W4, 0x10EE
+376:                   buckVoltage3P3Z.minOutput = BUCKMINDUTYCYCLE;
+000F2A  EB0200     CLR W4
+000F2C  888764     MOV W4, 0x10EC
+377:               
+378:                   #else
+379:               
+380:                   buckACoefficients[0] = BUCKCOMP3P3ZCOEFFA1;
+381:                   buckACoefficients[1] = BUCKCOMP3P3ZCOEFFA2;
+382:                   buckACoefficients[2] = BUCKCOMP3P3ZCOEFFA3;
+383:               
+384:                   buckBCoefficients[0] = BUCKCOMP3P3ZCOEFFB0;
+385:                   buckBCoefficients[1] = BUCKCOMP3P3ZCOEFFB1;
+386:                   buckBCoefficients[2] = BUCKCOMP3P3ZCOEFFB2;
+387:                   buckBCoefficients[3] = BUCKCOMP3P3ZCOEFFB3;
+388:               
+389:                   // Swap to Alternate W-Reg #1
+390:                   asm("CTXTSWP #0x1");
+391:               
+392:                   WREG1 = &ADCBUF2;
+393:                   WREG2 = &PDC1;
+394:                   WREG3 = BUCKPRESHIFT;
+395:                   // W4, W5 used for MAC/MPY instructions
+396:                   WREG6 = BUCKPOSTSHIFT;
+397:                   WREG7 = BUCKPOSTSCALER;             // Used in MPY
+398:                   WREG8 = &buckACoefficients[0];
+399:                   WREG9 = &buckBCoefficients[0];
+400:                   WREG10 = &buckErrorHistory[0];
+401:                   WREG11 = &buckControlHistory[0];
+402:                   WREG12 = BUCKMINDUTYCYCLE;
+403:                   WREG13 = BUCKMAXDUTYCYCLE;
+404:                   WREG14 = 0x0080;                  // Corcon setup
+405:               
+406:                   asm("CTXTSWP #0x0");
+407:               
+408:                   #endif
+409:               
+410:               }
+000F2E  FA8000     ULNK
+000F30  060000     RETURN
+411:               #endif
+412:               
+413:               #if((OPENLOOP == DISABLED) && (BOOST == ENABLED))
+414:               void initBoostComp(void)
+415:               {
+416:                   #if (USE_ALT_WREG == DISABLED)
+417:                   boostVoltage3P3Z.aCoefficients = &boostACoefficients[0];
+418:                   boostVoltage3P3Z.bCoefficients = &boostBCoefficients[0];
+419:               
+420:                   boostVoltage3P3Z.controlHistory = &boostControlHistory[0];
+421:                   boostVoltage3P3Z.errorHistory = &boostErrorHistory[0];
+422:               
+423:                   SMPS_Controller3P3ZInitialize(&boostVoltage3P3Z);
+424:               
+425:                   boostVoltage3P3Z.aCoefficients[0] = BOOSTCOMP3P3ZCOEFFA1;
+426:                   boostVoltage3P3Z.aCoefficients[1] = BOOSTCOMP3P3ZCOEFFA2;
+427:                   boostVoltage3P3Z.aCoefficients[2] = BOOSTCOMP3P3ZCOEFFA3;
+428:               
+429:                   boostVoltage3P3Z.bCoefficients[0] = BOOSTCOMP3P3ZCOEFFB0;
+430:                   boostVoltage3P3Z.bCoefficients[1] = BOOSTCOMP3P3ZCOEFFB1;
+431:                   boostVoltage3P3Z.bCoefficients[2] = BOOSTCOMP3P3ZCOEFFB2;
+432:                   boostVoltage3P3Z.bCoefficients[3] = BOOSTCOMP3P3ZCOEFFB3;
+433:               
+434:                   boostVoltage3P3Z.preShift   = BOOSTPRESHIFT;
+435:                   boostVoltage3P3Z.postShift  = BOOSTPOSTSHIFT;
+436:                   boostVoltage3P3Z.postScaler = BOOSTPOSTSCALER;
+437:               
+438:                   boostVoltage3P3Z.maxOutput = BOOSTMAXDUTYCYCLE;
+439:                   boostVoltage3P3Z.minOutput = BOOSTMINDUTYCYCLE;
+440:               
+441:                   #else
+442:                   boostACoefficients[0] = BOOSTCOMP3P3ZCOEFFA1;
+443:                   boostACoefficients[1] = BOOSTCOMP3P3ZCOEFFA2;
+444:                   boostACoefficients[2] = BOOSTCOMP3P3ZCOEFFA3;
+445:               
+446:                   boostBCoefficients[0] = BOOSTCOMP3P3ZCOEFFB0;
+447:                   boostBCoefficients[1] = BOOSTCOMP3P3ZCOEFFB1;
+448:                   boostBCoefficients[2] = BOOSTCOMP3P3ZCOEFFB2;
+449:                   boostBCoefficients[3] = BOOSTCOMP3P3ZCOEFFB3;
+450:               
+451:                   // Swap to Alternate W-Reg #2
+452:                   asm("CTXTSWP #0x2");
+453:               
+454:                   WREG1 = &ADCBUF3;
+455:                   WREG2 = &PDC2;
+456:                   WREG3 = BOOSTPRESHIFT;
+457:                   // W4, W5 used for MAC/MPY instructions
+458:                   WREG6 = BOOSTPOSTSHIFT;
+459:                   WREG7 = BOOSTPOSTSCALER;             // Used in MPY
+460:                   WREG8 = &boostACoefficients[0];
+461:                   WREG9 = &boostBCoefficients[0];
+462:                   WREG10 = &boostErrorHistory[0];
+463:                   WREG11 = &boostControlHistory[0];
+464:                   WREG12 = BOOSTMINDUTYCYCLE;
+465:                   WREG13 = BOOSTMAXDUTYCYCLE;
+466:                   WREG14 = 0x0080;                  // Corcon setup
+467:               
+468:                   asm("CTXTSWP #0x0");
+469:               
+470:               
+471:                   #endif
+472:               
+473:               
+474:               }
+475:               #endif

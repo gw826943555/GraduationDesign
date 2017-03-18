@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><dcdt>
+    <project type="Peak Current Mode" name="buck">
+        <compensator type="2P2Z">
+            <pole type="0" value="6042.000"/>
+            <pole type="2" value="20854.000"/>
+            <zero type="1" value="200.000"/>
+            <gain type="kdc" value="1.000"/>
+            <setting type="warp" value="false"/>
+            <pwm type="frequency" value="350000.000"/>
+            <pwm type="ratio" value="2"/>
+            <pwm type="PWM Max Resolution" value="1.060e-09"/>
+            <pwm type="computational delay" value="3.000e-07"/>
+            <pwm type="gate drive delay" value="1.500e-07"/>
+            <clamp type="min" value="0"/>
+            <clamp type="max" value="4095"/>
+        </compensator>
+        <plant type="polynomial" value="Gid">
+            <a type="0" value="5.685e+08"/>
+            <a type="1" value="4.091e+05"/>
+            <a type="2" value="0.000e+00"/>
+            <a type="3" value="0.000e+00"/>
+            <a type="4" value="0.000e+00"/>
+            <a type="5" value="0.000e+00"/>
+            <b type="0" value="1.388e+08"/>
+            <b type="1" value="4.520e+03"/>
+            <b type="2" value="1.000e+00"/>
+            <b type="3" value="0.000e+00"/>
+            <b type="4" value="0.000e+00"/>
+            <b type="5" value="0.000e+00"/>
+        </plant>
+        <plant type="polynomial" value="Gvd">
+            <a type="0" value="1.238e+09"/>
+            <a type="1" value="2.000e+04"/>
+            <a type="2" value="0.000e+00"/>
+            <a type="3" value="0.000e+00"/>
+            <a type="4" value="0.000e+00"/>
+            <a type="5" value="0.000e+00"/>
+            <b type="0" value="1.388e+08"/>
+            <b type="1" value="4.520e+03"/>
+            <b type="2" value="1.000e+00"/>
+            <b type="3" value="0.000e+00"/>
+            <b type="4" value="0.000e+00"/>
+            <b type="5" value="0.000e+00"/>
+        </plant>
+        <feedback type="rc network" value="Hfb_voltage">
+            <resister type="1" value="1100"/>
+            <resister type="2" value="3160"/>
+            <capacitor type="1" value="1.800e-09"/>
+            <adc type="resolution" value="12-bit"/>
+            <adc type="latency" value="300"/>
+            <adc type="voltage range" value="3.300e+00"/>
+            <adc type="output" value="5.000e+00"/>
+            <adc type="Kr" value="0.0649"/>
+        </feedback>
+        <feedback type="fixed gain" value="Hfb_current">
+            <gain type="feedback" value="7.200e-01"/>
+            <frequency type="bandwidth" value="300000"/>
+            <adc type="resolution" value="10-bit"/>
+            <adc type="latency" value="600"/>
+            <adc type="voltage range" value="3.300e+00"/>
+            <adc type="output" value="5.000e+00"/>
+            <adc type="Kr" value="0.0000"/>
+        </feedback>
+        <comparator>
+            <setting type="latency" value="3.000e-08"/>
+            <setting type="max input voltage" value="1.650e+00"/>
+            <setting type="gate drive delay" value="3.000e-07"/>
+            <gain type="Fm" value="3.670e-01"/>
+            <dac type="resolution" value="10-bit"/>
+            <dac type="settling time" value="1.500e-06"/>
+            <dac type="reference voltage" value="1.650e+00"/>
+        </comparator>
+    </project>
+</dcdt>
