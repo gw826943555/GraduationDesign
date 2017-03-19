@@ -113,7 +113,7 @@
 // ----------------- BOOST CONFIGURATIONS --------------- //
 
 // Enable/Disable Boost Converter
-#define BOOST ENABLED
+#define BOOST DISABLED
 
 
 // Output Voltage Setpoint

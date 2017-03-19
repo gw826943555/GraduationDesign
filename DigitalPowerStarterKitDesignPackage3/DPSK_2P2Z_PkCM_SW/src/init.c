@@ -113,7 +113,7 @@ void InitTimer(void)
     T1CONbits.TCKPS = TMRSCALER;    //?????????8
     T1CONbits.TCS = 0;              // Clock source is internal Fcy???? 70Mhz
 
-    IFS0bits.T1IF = 0;              //????????
+    IFS0bits.T1IF = 0;              //
     IPC0bits.T1IP = 4;              //?????4
     IEC0bits.T1IE = 1;              //?????1??
     T1CONbits.TON = 1;              //?????1
@@ -246,8 +246,9 @@ void InitPWM3(void)
 
 void InitCMP(void)   // Buck & Boost overcurrent protection
 {
+    //PDF Page 267
     #if(BUCK == ENABLED)
-    CMP1CONbits.INSEL  = 0;          // Input: CMP1A
+    CMP1CONbits.INSEL  = 0;          // Input: CMP1A CS_Buck
     CMP1CONbits.HYSSEL = 1;          // 5mV of Hysteresis
 
     CMP1CONbits.RANGE = 1;           // AVdd is the max DACx output voltage
