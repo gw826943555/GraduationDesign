@@ -47,10 +47,10 @@
 
 #define PWMDIVIDERSETTING 1         // 1, 2, 4, 8, 16 (aligns w/ above #define)
 #define F_ACLK  (unsigned long)(7372800 * 128)             
-#define T_ACLK	((float)(1/(float)(F_ACLK/PWMDIVIDERSETTING)))
+#define T_ACLK	((float)(1/(float)(F_ACLK/PWMDIVIDERSETTING)))  //1.05963813ns
 
 // PWM Period Calculation ( PTPER = 2696 for ~350 kHz )
-#define PERIODVALUE  ((unsigned int)(((float)((1/(float)(CONVSWITCHFREQ))/T_ACLK)-1))) 
+#define PERIODVALUE  ((unsigned int)(((float)((1/(float)(CONVSWITCHFREQ))/T_ACLK)-1))) //2696
 
 #define ADCRESOLUTION  1241      // 4096/3.3V
 #define DACRESOLUTION  1241

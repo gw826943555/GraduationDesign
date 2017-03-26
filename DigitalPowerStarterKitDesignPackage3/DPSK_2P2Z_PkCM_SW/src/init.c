@@ -132,46 +132,60 @@ void InitTimer(void)
 void InitBuckPWM(void)
 {
     IOCON1bits.PENH = 0;            // GPIO controls I/O port
-    IOCON1bits.PENL = 0;           
+    IOCON1bits.PENL = 0;            //PWMxH/PWMxL Output Pin Ownership bit
 
     IOCON1bits.PMOD = 0;            // Complementary Mode
+                                    //PWMx I/O Pin Mode bits
     
     IOCON1bits.POLH = 0;            // Drive signals are active-high
     IOCON1bits.POLL = 0;            // Drive signals are active-high
+                                    //PWMxH/PWMxL Output Pin Polarity bit
 
     IOCON1bits.OVRENH = 0;          // Override disabled
-    IOCON1bits.OVRENL = 0;	  
+    IOCON1bits.OVRENL = 0;          // Override Enable for PWMxH Pin bit
+                                    // PWMx generator provides data for the PWMxH/PWMxL pin
     IOCON1bits.OVRDAT = 0b00;       // Override data PWMH and PWML
+                                    // Data for PWMxH, PWMxL Pins if Override is Enabled bits
     IOCON1bits.FLTDAT = 0b01;       // If fault occurs:
                                     // PWMH = 0 & PWML = 1
+                                    // State for PWMxH and PWMxL Pins if FLTMOD<1:0> are Enabled bits
 
     PWMCON1bits.DTC   = 0;          // Positive Deadtime enabled
-    DTR1    = 80;
-    ALTDTR1 = 110;
+                                    // Dead-Time Control bits
+    DTR1    = 80;                   // PWM1 DEAD-TIME REGISTER
+    ALTDTR1 = 110;                  // PWM1 ALTERNATE DEAD-TIME REGISTER 
 				  
     PWMCON1bits.IUE = 0;            // Disable Immediate duty cycle updates
-    PWMCON1bits.ITB = 0;            // Select Primary Timebase mode
+                                    // Immediate Update Enable bit
+    PWMCON1bits.ITB = 0;            // Select Primary Timebase mode 
+                                    // Independent Time Base Mode bit
+                                    // PTPER register provides timing for this PWM1 generator
 
     FCLCON1bits.FLTSRC = 0b01101;   // Fault Control Signal assigned to CMP1
+                                    // Fault Control Signal Source Select for PWM1 Generator bits
     FCLCON1bits.FLTPOL = 0;         // Fault Signal is active-high
+                                    //  Fault Polarity for PWM1 Generator bit
     FCLCON1bits.FLTMOD = 1;         // Cycle-by-Cycle current limiting
+                                    // Fault Mode for PWM1 Generator bits
 
     // In order to block the sensed current spike at the
-    // turn on edge of the HS FET, use Leading Edge blanking.
+    // turn on edge of the HS FET, use Leading Edge blanking(LEB).
     LEBCON1bits.PHR      = 1;       // Enable LEB bit for HS MOSFET rising edge
+                                    // PWMxH Rising Edge Trigger Enable bit
     LEBCON1bits.FLTLEBEN = 1;       // Fault Input LEB Enabled
+                                    // Fault Input Leading-Edge Blanking Enable bit
     LEBDLY1bits.LEB      = 20;      // 8.32n Steps x 20 = 160ns
-
+                                    // Leading-Edge Blanking Delay for Current-Limit and Fault Inputs bits
     TRGCON1bits.TRGDIV  = 1;        // Trigger interrupt generated every 2 PWM cycles
-
+                                    // Trigger # Output Divider bits
     TRGCON1bits.TRGSTRT = 0;        // Trigger generated after waiting 0 PWM cycles
-
+                                    // Trigger Postscaler Start Enable Select bits
     // Initialize PDC1 depending on configuration
 
     #if(OPENLOOP == ENABLED)
     PDC1 = BUCKOPENLOOPDC;
     #else
-    PDC1 = BUCKMAXDUTYCYCLE;
+    PDC1 = BUCKMAXDUTYCYCLE;        // PWM1 Generator Duty Cycle Value bits
     #endif
 
     TRIG1 = 30;                     // Set Initial Trigger location
@@ -231,16 +245,21 @@ void InitPWM3(void)
 
     #else
     TRGCON3bits.TRGSTRT = 0;    // Trigger generated after waiting 0 PWM cycles
+                                //Trigger Postscaler Start Enable Select bits
 
     #endif
 
     TRIG3 = 500;
     TRGCON3bits.TRGDIV = 5;    // Trigger interrupt generated once every 6 PWM cycle
-    FCLCON3bits.FLTMOD = 3;
-    IOCON3bits.PMOD    = 1;
+                               // Trigger # Output Divider bits
+    FCLCON3bits.FLTMOD = 3;    //Fault Mode for PWMx Generator bits
+                               //Fault input is disabled
+    IOCON3bits.PMOD    = 1;    //PWMx I/O pin pair is in the Redundant Output mode
+                               //PWMx I/O Pin Mode bits
 
     IOCON3bits.PENL = 0;        // Give Ownership of PWM3 to device pin
-    IOCON3bits.PENH = 0;
+    IOCON3bits.PENH = 0;        //GPIO module controls the PWMxH pin
+                                //PWMxH/PWMxL Output Pin Ownership bit
 }
 
 

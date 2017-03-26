@@ -82,6 +82,7 @@ int main(void)
     InitPWM3();             // Used for synchronizing triggers to ADC
 
     IO_DRV            = 0;  // Initialize to LOW state
+                            //GPIO1
 
     #if (BUCK == ENABLED)
         InitBuckPWM();                // PWM Setup for Buck converter
