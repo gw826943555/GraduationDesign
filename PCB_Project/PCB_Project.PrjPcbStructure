@@ -1,1 +1,5 @@
-Record=TopLevelDocument|FileName=buck.SchDoc
+Record=TopLevelDocument|FileName=main.SchDoc
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=SignalConditioner.SchDoc|SymbolType=Normal|RawFileName=SignalConditioner.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=PowerSupply.SchDoc|SymbolType=Normal|RawFileName=PowerSupply.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=dsPIC33EP.SchDoc|SymbolType=Normal|RawFileName=dsPIC33EP.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=buck.SchDoc|SymbolType=Normal|RawFileName=buck.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
