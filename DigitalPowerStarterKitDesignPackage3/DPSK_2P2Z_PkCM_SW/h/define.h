@@ -95,7 +95,7 @@
 #define BUCK  ENABLED
 
 // Output Voltage Setpoint        
-#define BUCKVOLTAGEREFERENCE   3.3   // Buck output voltage in volts (max 3.8V with on-board load)        
+#define BUCKVOLTAGEREFERENCE   2   // Buck output voltage in volts (max 3.8V with on-board load)        
 
 //buck feedback gains   
 #define VBUCKFBGAIN   0.755981   // 3.16k/(1.02k+3.16k)

@@ -3,17 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/isr.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/compensator_init.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/init.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/h/main.h</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/compensator_isr.S</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/DPSK_PkCM.X/dcdt/boost/dcdt_generated_code/boost_dcdt.h</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/lcd_dpsk.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/pushButton.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/src/main.c</file>
-            <file>file:/E:/Github/GraduationDesign/DigitalPowerStarterKitDesignPackage3/DPSK_2P2Z_PkCM_SW/h/compensator_init.h</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
