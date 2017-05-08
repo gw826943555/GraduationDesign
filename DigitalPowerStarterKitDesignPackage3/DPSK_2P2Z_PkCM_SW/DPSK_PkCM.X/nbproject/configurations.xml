@@ -64,7 +64,7 @@
         <targetDevice>dsPIC33EP64GS502</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>PKOBSKDEPlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.31</languageToolchainVersion>
         <platform>3</platform>

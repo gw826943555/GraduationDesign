@@ -196,7 +196,8 @@ void LCD_DPSK_Refresh(void)
       lcd_putstr(LCD_buckStr1);
 
       lcd_goto(0,1);
-      lcd_putstr("Boost: Disabled ");
+    //  LCD_DPSK_ADCShortToString(PDC1,2,)
+      lcd_putstr("PDC1:");
 
       #elif((BOOST == ENABLED) && (BUCK == DISABLED))
   

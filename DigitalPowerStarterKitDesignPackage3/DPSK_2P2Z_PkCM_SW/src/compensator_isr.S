@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; © 2015 Microchip Technology Inc.
+;; ?2015 Microchip Technology Inc.
 ;;
 ;; MICROCHIP SOFTWARE NOTICE AND DISCLAIMER:  You may use this software, and any 
 ;;derivatives, exclusively with Microchip?s products. This software and any 

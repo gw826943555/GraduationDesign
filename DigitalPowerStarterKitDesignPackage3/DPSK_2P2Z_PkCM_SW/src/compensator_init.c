@@ -51,7 +51,6 @@ SMPS_Controller_Options_T boostOptions;  // Create variable for boost converter 
 #if((OPENLOOP == DISABLED) && (BUCK == ENABLED))
 void InitBuckComp(void)
 {
-
     MACRO_CLR_BUCKHISTORY();
 
     buckABCoefficients[0] = BUCK_COMP_2P2Z_COEFF_B0;
@@ -71,7 +70,6 @@ void InitBuckComp(void)
     buckOptions.period     = &PTPER;  // Pointer to period register
 
     InitAltRegContext1Setup();       // Setup  working registers to be used with compensator
-
 }
 #endif
 
